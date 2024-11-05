@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة IBAN</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        input, button { margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>حاسبة IBAN</h1>
+    <label for="accountNumber">رقم الحساب:</label>
+    <input type="text" id="accountNumber" placeholder="مثال: 0011457092" required>
+    <br>
+    <label for="bankCode">رقم البنك:</label>
+    <input type="text" id="bankCode" placeholder="مثال: 019" required>
+    <br>
+    <button onclick="calculateIBAN()">احسب IBAN</button>
+    <h2 id="ibanResult"></h2>
+
+    <script>
+        function calculateIBAN() {
+            const accountNumber = document.getElementById('accountNumber').value.trim();
+            const bankCode = document.getElementById('bankCode').value.trim();
+            const countryCode = 'IQ';
+            const countryCodeNumeric = '3426'; // IQ = 34 26
+
+            // تكوين السلسلة
+            const ibanString = countryCodeNumeric + '00' + bankCode + accountNumber;
+
+            // تحويل السلسلة إلى عدد صحيح
+            const ibanNumeric = BigInt(ibanString);
+
+            // حساب باقي القسمة
+            const remainder = ibanNumeric % 97n;
+
+            // حساب رقم التحقق
+            const checkDigits = (98n - remainder) % 100n;
+
+            // التأكد من أن رقم التحقق مكون من رقمين
+            const checkDigitsStr = String(checkDigits).padStart(2, '0');
+
+            // تكوين الرقم النهائي
+            const iban = `${countryCode}${checkDigitsStr} ${bankCode} ${accountNumber}`;
+
+            // عرض النتيجة
+            document.getElementById('ibanResult').innerText = `رقم IBAN هو: ${iban}`;
+        }
+    </script>
+</body>
+</html>
