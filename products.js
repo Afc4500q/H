@@ -1,4 +1,4 @@
-const apiURL = "https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products";
+
 
 // عرض بيانات المستخدم في نافذة الحساب
 const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -18,22 +18,25 @@ document.getElementById("close-modal").addEventListener("click", () => {
 });
 
 // جلب المنتجات وعرضها
-async function fetchProducts() {
-  const container = document.getElementById("products-container");
+const apiUrl = "https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products";
 
+async function fetchProducts() {
   try {
-    const response = await fetch(apiURL);
+    const response = await fetch(apiUrl);
     const products = await response.json();
 
+    const container = document.getElementById("products-container");
+
+    // عرض المنتجات
     products.forEach((product) => {
-      const profit = (product.min_price * 0.13).toFixed(2);
+      const profit = (product.minprice * 0.13).toFixed(2); // حساب نسبة الربح
       const productCard = `
         <div class="product-card">
           <img src="${product.image}" alt="${product.name}">
           <h3>${product.name}</h3>
-          <p><strong>أقل سعر:</strong> ${products.minprice}</p>
-          <p><strong>أعلى سعر:</strong> ${products.maxprice}</p>
-          <p><strong>الحالة:</strong> ${products.condition}</p>
+          <p><strong>أقل سعر:</strong> ${product.minprice}</p>
+          <p><strong>أعلى سعر:</strong> ${product.maxprice}</p>
+          <p><strong>الحالة:</strong> ${product.condition ? "متوفر" : "غير متوفر"}</p>
           <p><strong>أربح:</strong> ${profit}</p>
           <div class="buttons">
             <button>بيع لزبون</button>
@@ -47,5 +50,7 @@ async function fetchProducts() {
     console.error("Error fetching products:", error);
   }
 }
+
+
 
 fetchProducts();
