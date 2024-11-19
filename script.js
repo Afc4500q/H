@@ -23,7 +23,14 @@ async function login() {
 
     if (user) {
       // تسجيل الدخول ناجح: حفظ بيانات المستخدم في LocalStorage
-      localStorage.setItem("loggedUser", JSON.stringify(user));
+      const loggedUser = {
+        username: user.username,
+        userId: user.id,  // تخزين ID المستخدم
+        // يمكن إضافة معلومات أخرى إذا كانت موجودة في API
+      };
+
+      // تخزين البيانات بشكل آمن باستخدام JSON
+      localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
 
       // الانتقال إلى صفحة المنتجات
       window.location.href = "products.html";
