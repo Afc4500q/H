@@ -29,11 +29,11 @@ async function fetchProducts() {
       const profit = (product.min_price * 0.13).toFixed(2);
       const productCard = `
         <div class="product-card">
-          <img src="${product.image}" alt="${product.name}">
-          <h3>${product.name}</h3>
-          <p><strong>أقل سعر:</strong> ${product.min_price}</p>
-          <p><strong>أعلى سعر:</strong> ${product.max_price}</p>
-          <p><strong>الحالة:</strong> ${product.available ? "متوفر" : "غير متوفر"}</p>
+          <img src="${products.image}" alt="${products.name}">
+          <h3>${products.name}</h3>
+          <p><strong>أقل سعر:</strong> ${products.minprice}</p>
+          <p><strong>أعلى سعر:</strong> ${products.maxprice}</p>
+          <p><strong>الحالة:</strong> ${products.condition ? "متوفر" : "غير متوفر"}</p>
           <p><strong>أربح:</strong> ${profit}</p>
           <div class="buttons">
             <button>بيع لزبون</button>
