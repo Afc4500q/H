@@ -1,40 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>صفحة المنتجات - عشتار</title>
-  <link rel="stylesheet" href="products.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عشتار</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+        }
+        header h1 {
+            font-family: 'Cairo', sans-serif;
+            font-size: 24px;
+        }
+        header .buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .buttons a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            border: 1px solid #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .product-card img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .product-card button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-  <!-- الشريط العلوي -->
-  <header class="header">
-    <div class="brand">عشتار</div>
-    <div class="actions">
-      <button id="account-btn">حسابي</button>
-      <button id="cart-btn" onclick="window.location.href='cart.html'">السلة</button>
+    <header>
+        <h1>عشتار</h1>
+        <div class="buttons">
+            <a href="#">حسابي</a>
+            <a href="cart.html">سلة المنتجات</a>
+        </div>
+    </header>
+
+    <section class="products">
+        <!-- المنتجات ستُعرض هنا -->
+    </section>
+
+    <!-- نافذة بيع الزبون -->
+    <div id="customerModal" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 20px; background: white; border: 1px solid #ddd;">
+        <h2>معلومات الزبون</h2>
+        <form id="customerForm">
+            <input type="text" name="name" placeholder="الاسم الثلاثي" required><br><br>
+            <input type="text" name="phone" placeholder="رقم الهاتف" required><br><br>
+            <input type="text" name="province" placeholder="المحافظة" required><br><br>
+            <input type="text" name="city" placeholder="المدينة" required><br><br>
+            <input type="text" name="region" placeholder="المنطقة" required><br><br>
+            <button type="submit">إرسال</button>
+            <button type="button" onclick="closeModal()">إغلاق</button>
+        </form>
     </div>
-  </header>
 
-  <!-- نافذة الحساب -->
-  <div class="account-modal" id="account-modal">
-    <div class="modal-content">
-      <span class="close" id="close-modal">&times;</span>
-      <h2>بيانات المستخدم</h2>
-      <p><strong>المعرف:</strong> <span id="user-id"></span></p>
-      <p><strong>اسم المستخدم:</strong> <span id="user-name"></span></p>
-      <p><strong>كلمة المرور:</strong> <span id="user-password"></span></p>
-      <p><strong>الرصيد:</strong> <span id="user-balance"></span></p>
-      <p><strong>عدد الطلبات الناجحة:</strong> <span id="user-orders"></span></p>
-    </div>
-  </div>
+    <script>
+        // Fetch API للمنتجات
+        const productsContainer = document.querySelector('.products');
 
-  <!-- قائمة المنتجات -->
-  <main class="products-container" id="products-container">
-    <!-- المنتجات ستُضاف ديناميكيًا باستخدام JavaScript -->
-  </main>
+        async function fetchProducts() {
+            const response = await fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products'); // ضع رابط الـ API هنا
+            const products = await response.json();
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>السعر: من ${product.min_price} إلى ${product.max_price} دينار</p>
+                    <button onclick="addToCart(${product.id})">إضافة إلى السلة</button>
+                `;
+                productsContainer.appendChild(productCard);
+            });
+        }
 
-  
-  <script src="products.js"></script>
+        // فتح نافذة بيع الزبون
+        function openModal() {
+            document.getElementById('customerModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('customerModal').style.display = 'none';
+        }
+
+        // إرسال بيانات الزبون إلى بوت Telegram
+        document.getElementById('customerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            const botToken = '7571233461:AAH8lJsUeuKV_L57A42C6pE5i7FFi1_LIak'; // استبدل بـ Token البوت الخاص بك
+            const chatId = '1434047374'; // ضع الـ Chat ID الخاص بك
+
+            const message = `
+                اسم الزبون: ${data.name}
+                رقم الهاتف: ${data.phone}
+                المحافظة: ${data.province}
+                المدينة: ${data.city}
+                المنطقة: ${data.region}
+            `;
+
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: message }),
+            });
+
+            closeModal();
+            alert('تم إرسال المعلومات بنجاح!');
+        });
+
+        // إضافة المنتج إلى السلة
+        function addToCart(productId) {
+            // السلة محفوظة في LocalStorage
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('تم إضافة المنتج إلى السلة!');
+        }
+
+        // تحميل المنتجات عند فتح الصفحة
+        fetchProducts();
+    </script>
 </body>
 </html>
