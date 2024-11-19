@@ -31,9 +31,9 @@ async function fetchProducts() {
         <div class="product-card">
           <img src="${products.image}" alt="${products.name}">
           <h3>${products.name}</h3>
-          <p><strong>أقل سعر:</strong> ${product.minprice}</p>
-          <p><strong>أعلى سعر:</strong> ${product.maxprice}</p>
-          <p><strong>الحالة:</strong> ${product.condition ? "متوفر" : "غير متوفر"}</p>
+          <p><strong>أقل سعر:</strong> ${products.minprice}</p>
+          <p><strong>أعلى سعر:</strong> ${products.maxprice}</p>
+          <p><strong>الحالة:</strong> ${products.condition}</p>
           <p><strong>أربح:</strong> ${profit}</p>
           <div class="buttons">
             <button>بيع لزبون</button>
