@@ -7,7 +7,7 @@ async function login() {
 
   // التحقق من ملء الحقول
   if (!username || !password) {
-    errorDiv.textContent = "Please fill out all fields.";
+    errorDiv.textContent = "يرجى ملء جميع الحقول.";
     return;
   }
 
@@ -22,16 +22,17 @@ async function login() {
     );
 
     if (user) {
-      // تسجيل الدخول ناجح
-      errorDiv.textContent = "";
-      alert("Login successful!");
-      window.location.href = "products.html"; // الانتقال إلى صفحة المنتجات
+      // تسجيل الدخول ناجح: حفظ بيانات المستخدم في LocalStorage
+      localStorage.setItem("loggedUser", JSON.stringify(user));
+
+      // الانتقال إلى صفحة المنتجات
+      window.location.href = "products.html";
     } else {
       // خطأ في البيانات المدخلة
-      errorDiv.textContent = "Invalid username or password.";
+      errorDiv.textContent = "اسم المستخدم أو كلمة المرور غير صحيحة.";
     }
   } catch (error) {
     console.error("Error fetching API:", error);
-    errorDiv.textContent = "An error occurred. Please try again.";
+    errorDiv.textContent = "حدث خطأ أثناء الاتصال بالخادم. حاول مرة أخرى.";
   }
 }
