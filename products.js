@@ -1,4 +1,4 @@
-
+const apiUrl = "https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products";
 
 // عرض بيانات المستخدم في نافذة الحساب
 const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
@@ -18,6 +18,8 @@ document.getElementById("close-modal").addEventListener("click", () => {
 });
 
 // جلب المنتجات وعرضها
+
+
 const apiUrl = "https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products";
 
 async function fetchProducts() {
@@ -29,7 +31,7 @@ async function fetchProducts() {
 
     // عرض المنتجات
     products.forEach((product) => {
-      const profit = (product.minprice / 100 * 13); // حساب نسبة الربح
+      const profit = (product.minprice * 0.13).toFixed(2); // حساب 13% من السعر الأدنى
       const productCard = `
         <div class="product-card">
           <img src="${product.image}" alt="${product.name}">
@@ -49,11 +51,23 @@ async function fetchProducts() {
   } catch (error) {
     console.error("Error fetching products:", error);
   }
+}
 
-  
-
-
-
-
-
+// استدعاء البيانات عند تحميل الصفحة
 fetchProducts();
+
+
+// دالة لإضافة المنتج إلى السلة
+    function addToCart(image, name, minprice, maxprice) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push({ image, name, minprice, maxprice, quantity: 1 });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('تم إضافة المنتج إلى السلة');
+    }
+
+    // دالة للانتقال إلى صفحة السلة
+    function goToCart() {
+      window.location.href = "cart.html"; // استبدل "cart.html" بمسار صفحة السلة لديك
+    }
+
+ 
