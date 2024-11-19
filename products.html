@@ -65,29 +65,29 @@
     <button class="logout" onclick="logout()">تسجيل الخروج</button>
   </div>
   <script>
-    // استرجاع بيانات المستخدم من LocalStorage
-    const userInfo = document.getElementById("user-info");
-    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+  // استرجاع بيانات المستخدم من LocalStorage
+  const userInfo = document.getElementById("user-info");
+  const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 
-    if (loggedUser) {
-      // عرض معلومات المستخدم
-      userInfo.innerHTML = `
-        <p><strong>المعرف:</strong> ${loggedUser.id}</p>
-        <p><strong>اسم المستخدم:</strong> ${loggedUser.username}</p>
-        <p><strong>كلمة المرور:</strong> ${loggedUser.password}</p>
-        <p><strong>الرصيد:</strong> ${loggedUser.balance || "غير متوفر"}</p>
-      `;
-    } else {
-      // إذا لم يتم تسجيل الدخول، إعادة التوجيه إلى صفحة تسجيل الدخول
-      alert("يرجى تسجيل الدخول للوصول إلى هذه الصفحة.");
-      window.location.href = "index.html";
-    }
+  if (loggedUser) {
+    // عرض معلومات المستخدم
+    userInfo.innerHTML = `
+      <p><strong>المعرف:</strong> ${loggedUser.id}</p>
+      <p><strong>اسم المستخدم:</strong> ${loggedUser.username}</p>
+      <p><strong>كلمة المرور:</strong> ${loggedUser.password}</p>
+      <p><strong>الرصيد:</strong> ${loggedUser.balance || "غير متوفر"}</p>
+    `;
+  } else {
+    // إذا لم يتم تسجيل الدخول، إعادة التوجيه إلى صفحة تسجيل الدخول
+    alert("يرجى تسجيل الدخول للوصول إلى هذه الصفحة.");
+    window.location.href = "index.html";
+  }
 
-    // تسجيل الخروج
-    function logout() {
-      localStorage.removeItem("loggedUser");
-      window.location.href = "index.html";
-    }
-  </script>
+  // تسجيل الخروج
+  function logout() {
+    localStorage.removeItem("loggedUser");
+    window.location.href = "index.html";
+  }
+</script>
 </body>
 </html>
