@@ -157,7 +157,7 @@ function openAccountModal() {
     modal.style.display = 'flex';
 
     // جلب اسم المستخدم من LocalStorage أو تعيين رسالة إذا لم يتم تسجيل الدخول
-    const userName = localStorage.getItem('username') || 'لم يتم تسجيل الدخول';
+    const userName = localStorage.getItem('userName') || 'لم يتم تسجيل الدخول';
     document.getElementById('userName').textContent = userName;
 }
 
