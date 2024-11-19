@@ -157,7 +157,7 @@ function openAccountModal() {
     modal.style.display = 'flex';
 
     // جلب اسم المستخدم من LocalStorage أو تعيين رسالة إذا لم يتم تسجيل الدخول
-    const userName = localStorage.getItem('userName') || 'لم يتم تسجيل الدخول';
+    const userName = localStorage.getItem('username') || 'لم يتم تسجيل الدخول';
     document.getElementById('userName').textContent = userName;
 }
 
@@ -166,7 +166,7 @@ function closeModal() {
     const modal = document.getElementById('accountModal');
     modal.style.display = 'none';
 }
-const userName = localStorage.getItem('userName')
+
 // لتخزين اسم المستخدم في LocalStorage عند تسجيل الدخول
 // مثال: تخزين اسم المستخدم عند تسجيل الدخول
 // localStorage.setItem('userName', 'اسم المستخدم');
