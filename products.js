@@ -56,6 +56,77 @@ async function fetchProducts() {
 // استدعاء البيانات عند تحميل الصفحة
 fetchProducts();
 
+let cart = JSON.parse(localStorage.getItem("cart")) || []; // تحميل السلة من localStorage إذا كانت موجودة
+
+function addToCart(product) {
+  // التحقق من وجود المنتج في السلة مسبقًا
+  const existingProduct = cart.find((item) => item.id === product.id);
+
+  if (existingProduct) {
+    existingProduct.quantity += 1; // زيادة الكمية إذا كان المنتج موجودًا
+  } else {
+    // إضافة المنتج الجديد مع تحديد الكمية
+    cart.push({ ...product, quantity: 1 });
+  }
+
+  // تحديث السلة في localStorage
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("تمت إضافة المنتج إلى السلة!");
+}
+
+// عرض المنتجات
+function displayProducts(products) {
+  const container = document.getElementById("productsContainer");
+
+  products.forEach((product) => {
+    const profit = (product.minprice * 0.13).toFixed(2);
+    const productCard = `
+      <div class="product-card">
+        <img src="${product.image}" alt="${product.name}">
+        <h3>${product.name}</h3>
+        <p><strong>أقل سعر:</strong> ${product.minprice}</p>
+        <p><strong>أعلى سعر:</strong> ${product.maxprice}</p>
+        <p><strong>الحالة:</strong> ${product.condition ? "متوفر" : "غير متوفر"}</p>
+        <p><strong>أربح:</strong> ${profit}</p>
+        <div class="buttons">
+          <button onclick="addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">إضافة إلى السلة</button>
+        </div>
+      </div>
+    `;
+    container.innerHTML += productCard;
+  });
+}
+
+// استدعاء المنتجات من API
+async function fetchProducts() {
+  try {
+    const response = await fetch("https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products");
+    const products = await response.json();
+    displayProducts(products);
+  } catch (error) {
+    console.error("خطأ في تحميل المنتجات:", error);
+  }
+}
+
+fetchProducts();
+
+let cart = JSON.parse(localStorage.getItem("cart")) || []; // تحميل السلة من localStorage إذا كانت موجودة
+
+function addToCart(product) {
+  // التحقق من وجود المنتج في السلة مسبقًا
+  const existingProduct = cart.find((item) => item.id === product.id);
+
+  if (existingProduct) {
+    existingProduct.quantity += 1; // زيادة الكمية إذا كان المنتج موجودًا
+  } else {
+    // إضافة المنتج الجديد مع تحديد الكمية
+    cart.push({ ...product, quantity: 1 });
+  }
+
+  // تحديث السلة في localStorage
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert("تمت إضافة المنتج إلى السلة!");
+}
 
 
     
