@@ -1,28 +1,101 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سلة المنتجات</title>
-  <style>
-    .cart-item {
-      border: 1px solid #ddd;
-      margin: 10px 0;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .cart-item img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة المنتجات</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+        }
+        header h1 {
+            font-family: 'Cairo', sans-serif;
+            font-size: 24px;
+        }
+        .cart {
+            padding: 20px;
+        }
+        .cart-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-item img {
+            max-width: 100px;
+            border-radius: 5px;
+        }
+        .cart-item .info {
+            flex: 1;
+            margin-left: 20px;
+        }
+    </style>
 </head>
 <body>
-  <h1>سلة المنتجات</h1>
-  <div id="cartContainer"></div>
-  <script src="cart.js"></script>
+    <header>
+        <h1>سلة المنتجات</h1>
+    </header>
+    <section class="cart">
+        <!-- سيتم عرض المنتجات هنا -->
+    </section>
+
+    <script>
+        async function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartContainer = document.querySelector('.cart');
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = '<p>السلة فارغة.</p>';
+                return;
+            }
+
+            // استبدل هذا الرابط بـ API المنتجات الخاص بك
+            const response = await fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products');
+            const products = await response.json();
+
+            // تصفية المنتجات بناءً على الـ IDs في السلة
+            const cartItems = products.filter(product => cart.includes(product.id));
+
+            // عرض المنتجات
+            cartItems.forEach(product => {
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <div class="info">
+                        <h3>${product.name}</h3>
+                        <p>السعر: ${product.min_price} - ${product.max_price} دينار</p>
+                    </div>
+                    <button onclick="removeFromCart(${product.id})">إزالة</button>
+                `;
+                cartContainer.appendChild(cartItem);
+            });
+        }
+
+        // إزالة منتج من السلة
+        function removeFromCart(productId) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(id => id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            location.reload(); // إعادة تحميل الصفحة لتحديث العرض
+        }
+
+        // تحميل السلة عند فتح الصفحة
+        loadCart();
+    </script>
 </body>
 </html>
