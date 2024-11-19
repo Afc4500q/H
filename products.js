@@ -29,7 +29,7 @@ async function fetchProducts() {
 
     // عرض المنتجات
     products.forEach((product) => {
-      const profit = (product.minprice / 100 * 13).toFixed(2); // حساب نسبة الربح
+      const profit = (product.minprice / 100 * 13); // حساب نسبة الربح
       const productCard = `
         <div class="product-card">
           <img src="${product.image}" alt="${product.name}">
