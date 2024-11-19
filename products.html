@@ -12,7 +12,7 @@
     <div class="brand">عشتار</div>
     <div class="actions">
       <button id="account-btn">حسابي</button>
-      <button id="cart-btn" onclick="goToCart()">السلة</button>
+      <button id="cart-btn" onclick="window.location.href='cart.html'">السلة</button>
     </div>
   </header>
 
@@ -33,19 +33,7 @@
   <main class="products-container" id="products-container">
     <!-- المنتجات ستُضاف ديناميكيًا باستخدام JavaScript -->
   </main>
-<script>
-function addToCart(image, name, minprice, maxprice) {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push({ image, name, minprice, maxprice, quantity: 1 });
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert('تم إضافة المنتج إلى السلة');
-    }
-‎// دالة الانتقال إلى صفحة السلة
-  function goToCart() {
-    window.location.href = "cart.html"; // استبدل "cart.html" بمسار صفحة السلة لديك
-  }
 
-</script>
   
   <script src="products.js"></script>
 </body>
