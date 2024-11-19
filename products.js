@@ -51,6 +51,16 @@ async function fetchProducts() {
   }
 }
 
+    // دالة لإضافة المنتج إلى السلة
+    function addToCart(image, name, minprice, maxprice) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push({ image, name, minprice, maxprice, quantity: 1 });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('تم إضافة المنتج إلى السلة');
+    }
+
+
+
 
 
 fetchProducts();
