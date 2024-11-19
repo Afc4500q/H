@@ -3,91 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>صفحة المنتجات</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      background: #f4f4f4;
-    }
-
-    .products-container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
-      color: #333;
-    }
-
-    h1 {
-      color: #4caf50;
-    }
-
-    .user-info {
-      margin-top: 20px;
-      text-align: left;
-    }
-
-    .user-info p {
-      font-size: 16px;
-      margin: 8px 0;
-    }
-
-    .logout {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #d9534f;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .logout:hover {
-      background: #c9302c;
-    }
-  </style>
+  <title>صفحة المنتجات - عشتار</title>
+  <link rel="stylesheet" href="products.css">
 </head>
 <body>
-  <div class="products-container">
-    <h1>مرحبا بك في صفحة المنتجات</h1>
-    <div class="user-info" id="user-info">
-      <!-- معلومات المستخدم ستضاف هنا ديناميكيًا -->
+  <!-- الشريط العلوي -->
+  <header class="header">
+    <div class="brand">عشتار</div>
+    <div class="actions">
+      <button id="account-btn">حسابي</button>
+      <button id="cart-btn">السلة</button>
     </div>
-    <button class="logout" onclick="logout()">تسجيل الخروج</button>
+  </header>
+
+  <!-- نافذة الحساب -->
+  <div class="account-modal" id="account-modal">
+    <div class="modal-content">
+      <span class="close" id="close-modal">&times;</span>
+      <h2>بيانات المستخدم</h2>
+      <p><strong>المعرف:</strong> <span id="user-id"></span></p>
+      <p><strong>اسم المستخدم:</strong> <span id="user-name"></span></p>
+      <p><strong>كلمة المرور:</strong> <span id="user-password"></span></p>
+      <p><strong>الرصيد:</strong> <span id="user-balance"></span></p>
+      <p><strong>عدد الطلبات الناجحة:</strong> <span id="user-orders"></span></p>
+    </div>
   </div>
-  <script>
-  // استرجاع بيانات المستخدم من LocalStorage
-  const userInfo = document.getElementById("user-info");
-  const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 
-  if (loggedUser) {
-    // عرض معلومات المستخدم
-    userInfo.innerHTML = `
-      <p><strong>المعرف:</strong> ${loggedUser.id}</p>
-      <p><strong>اسم المستخدم:</strong> ${loggedUser.username}</p>
-      <p><strong>كلمة المرور:</strong> ${loggedUser.password}</p>
-      <p><strong>الرصيد:</strong> ${loggedUser.balance || "غير متوفر"}</p>
-    `;
-  } else {
-    // إذا لم يتم تسجيل الدخول، إعادة التوجيه إلى صفحة تسجيل الدخول
-    alert("يرجى تسجيل الدخول للوصول إلى هذه الصفحة.");
-    window.location.href = "index.html";
-  }
+  <!-- قائمة المنتجات -->
+  <main class="products-container" id="products-container">
+    <!-- المنتجات ستُضاف ديناميكيًا باستخدام JavaScript -->
+  </main>
 
-  // تسجيل الخروج
-  function logout() {
-    localStorage.removeItem("loggedUser");
-    window.location.href = "index.html";
-  }
-</script>
+  <script src="products.js"></script>
 </body>
 </html>
