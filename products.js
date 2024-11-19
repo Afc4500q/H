@@ -58,6 +58,11 @@ async function fetchProducts() {
       localStorage.setItem('cart', JSON.stringify(cart));
       alert('تم إضافة المنتج إلى السلة');
     }
+>
+  // دالة الانتقال إلى صفحة السلة
+  function goToCart() {
+    window.location.href = "cart.html"; // استبدل "cart.html" بمسار صفحة السلة لديك
+  }
 
 
 
