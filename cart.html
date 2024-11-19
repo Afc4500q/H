@@ -1,146 +1,28 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>صفحة السلة</title>
+  <title>سلة المنتجات</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      padding: 20px;
-    }
-
     .cart-item {
-      background-color: #fff;
-      margin-bottom: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border: 1px solid #ddd;
+      margin: 10px 0;
+      padding: 10px;
       display: flex;
       align-items: center;
+      gap: 10px;
     }
-
     .cart-item img {
       width: 100px;
       height: 100px;
-      object-fit: contain;
-      margin-right: 15px;
-    }
-
-    .cart-item-details {
-      flex-grow: 1;
-    }
-
-    .cart-item-details h3 {
-      margin: 0;
-    }
-
-    .cart-item-actions button {
-      padding: 6px 12px;
-      margin: 5px;
-      border: none;
-      background-color: #4CAF50;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .cart-item-actions button:hover {
-      background-color: #45a049;
-    }
-
-    .cart-total {
-      font-size: 20px;
-      margin-top: 20px;
-      text-align: right;
+      object-fit: cover;
     }
   </style>
 </head>
 <body>
-
-  <h2>سلة المشتريات</h2>
-
-  <div id="cart-container"></div>
-
-  <div class="cart-total">
-    <p><strong>المجموع الكلي:</strong> <span id="total-price">0</span> ريال</p>
-  </div>
-
-  <div class="cart-item-actions">
-    <button onclick="buyAll()">بيع جميع المنتجات</button>
-  </div>
-
-  <script>
-    // دالة لعرض المنتجات في السلة
-    function displayCart() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const container = document.getElementById('cart-container');
-      let totalPrice = 0;
-
-      container.innerHTML = ''; // مسح المحتويات السابقة
-
-      cart.forEach((item, index) => {
-        const itemTotal = item.minprice * item.quantity;
-        totalPrice += itemTotal;
-
-        const cartItem = `
-          <div class="cart-item">
-            <img src="${item.image}" alt="${item.name}">
-            <div class="cart-item-details">
-              <h3>${item.name}</h3>
-              <p><strong>أقل سعر:</strong> ${item.minprice} ريال</p>
-              <p><strong>الكمية:</strong> <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)"> </p>
-            </div>
-            <div class="cart-item-actions">
-              <button onclick="removeItem(${index})">حذف</button>
-              <button onclick="buyItem(${index})">بيع للزبون</button>
-            </div>
-          </div>
-        `;
-        container.innerHTML += cartItem;
-      });
-
-      // تحديث المجموع الكلي
-      document.getElementById('total-price').innerText = totalPrice.toFixed(2);
-    }
-
-    // دالة لتحديث الكمية
-    function updateQuantity(index, quantity) {
-      const cart = JSON.parse(localStorage.getItem('cart'));
-      cart[index].quantity = parseInt(quantity);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      displayCart();
-    }
-
-    // دالة لحذف منتج من السلة
-    function removeItem(index) {
-      const cart = JSON.parse(localStorage.getItem('cart'));
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      displayCart();
-    }
-
-    // دالة لشراء منتج محدد
-    function buyItem(index) {
-      const cart = JSON.parse(localStorage.getItem('cart'));
-      const item = cart[index];
-      alert(`تم بيع المنتج: ${item.name}`);
-      removeItem(index); // إزالة المنتج بعد البيع
-    }
-
-    // دالة لشراء جميع المنتجات
-    function buyAll() {
-      const cart = JSON.parse(localStorage.getItem('cart'));
-      cart.forEach((item, index) => {
-        alert(`تم بيع المنتج: ${item.name}`);
-        removeItem(index); // إزالة المنتج بعد البيع
-      });
-    }
-
-    // عرض السلة عند تحميل الصفحة
-    displayCart();
-  </script>
-
+  <h1>سلة المنتجات</h1>
+  <div id="cartContainer"></div>
+  <script src="cart.js"></script>
 </body>
 </html>
