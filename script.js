@@ -43,3 +43,21 @@ async function login() {
     errorDiv.textContent = "حدث خطأ أثناء الاتصال بالخادم. حاول مرة أخرى.";
   }
 }
+
+fetch('/api/login', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username: 'user', password: 'pass' }),
+})
+.then(response => response.json())
+.then(data => {
+    if (data.user) {
+        // تخزين بيانات المستخدم
+        localStorage.setItem('userData', JSON.stringify(data.user));
+        window.location.href = '/profile.html'; // الانتقال لصفحة الملف الشخصي
+    } else {
+        alert('خطأ في تسجيل الدخول.');
+    }
+});
