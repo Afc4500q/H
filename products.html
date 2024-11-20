@@ -164,10 +164,10 @@ function openAccountModal() {
     if (loggedUser) {
       // عرض بيانات المستخدم في HTML
       document.getElementById("username").textContent = loggedUser.username;
-      document.getElementById("userId").textContent = loggedUser.userId;
+      document.getElementById("userid").textContent = loggedUser.userId;
     } else {
       // إذا لم توجد بيانات للمستخدم
-      document.getElementById("userName").textContent = "لا توجد بيانات للمستخدم";
+      document.getElementById("username").textContent = "لا توجد بيانات للمستخدم";
       document.getElementById("userid").textContent = "يرجى تسجيل الدخول.";
     }
 
