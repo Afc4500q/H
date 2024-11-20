@@ -56,7 +56,7 @@ fetch('/api/login', {
     if (data.user) {
         // تخزين بيانات المستخدم
         localStorage.setItem('userData', JSON.stringify(data.user));
-        window.location.href = '/profile.html'; // الانتقال لصفحة الملف الشخصي
+        window.location.href = '/products.html'; // الانتقال لصفحة الملف الشخصي
     } else {
         alert('خطأ في تسجيل الدخول.');
     }
