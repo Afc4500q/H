@@ -104,6 +104,7 @@
     <div class="modal-content">
         <h2>معلومات الحساب</h2>
         <p>الاسم المستخدم: <span id="userName">جاري تحميل الاسم...</span></p>
+        <p>الاسم المستخدم: <span id="userid">جاري تحميل الاسم...</span></p>
         <button onclick="closeModal()">إغلاق</button>
     </div>
 </div>
@@ -157,8 +158,19 @@ function openAccountModal() {
     modal.style.display = 'flex';
 
     // جلب اسم المستخدم من LocalStorage أو تعيين رسالة إذا لم يتم تسجيل الدخول
-    const userName = localStorage.getItem('loggedUser') || 'لم يتم تسجيل الدخول';
-    document.getElementById('userName').textContent = userName;
+    // استرجاع بيانات المستخدم من localStorage
+    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+
+    if (loggedUser) {
+      // عرض بيانات المستخدم في HTML
+      document.getElementById("username").textContent = loggedUser.username;
+      document.getElementById("userId").textContent = loggedUser.userId;
+    } else {
+      // إذا لم توجد بيانات للمستخدم
+      document.getElementById("userName").textContent = "لا توجد بيانات للمستخدم";
+      document.getElementById("userid").textContent = "يرجى تسجيل الدخول.";
+    }
+
 }
 
 // إغلاق نافذة الحساب
