@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // عرض البيانات في الصفحة
     document.getElementById('username').textContent = user.username;
-    document.getElementById('email').textContent = user.email;
+    document.getElementById('password').textContent = user.password;
 });
 
 // إغلاق نافذة الحساب
