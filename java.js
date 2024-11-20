@@ -23,22 +23,21 @@
 function openAccountModal() {
     const modal = document.getElementById('accountModal');
     modal.style.display = 'flex';
-
-    // جلب اسم المستخدم من LocalStorage أو تعيين رسالة إذا لم يتم تسجيل الدخول
-    // استرجاع بيانات المستخدم من localStorage
-    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-
-    if (loggedUser) {
-      // عرض بيانات المستخدم في HTML
-      document.getElementById("username").textContent = loggedUser.username;
-      document.getElementById("userId").textContent = loggedUser.userId;
-    } else {
-      // إذا لم توجد بيانات للمستخدم
-      document.getElementById("userName").textContent = "لا توجد بيانات للمستخدم";
-      document.getElementById("userid").textContent = "يرجى تسجيل الدخول.";
+document.addEventListener('DOMContentLoaded', () => {
+    const userData = localStorage.getItem('userData');
+    
+    if (!userData) {
+        alert('يرجى تسجيل الدخول أولاً!');
+        window.location.href = '/login.html'; // توجيه المستخدم لصفحة تسجيل الدخول
+        return;
     }
 
-}
+    const user = JSON.parse(userData); // تحويل النص المخزن إلى كائن
+
+    // عرض البيانات في الصفحة
+    document.getElementById('username').textContent = user.username;
+    document.getElementById('email').textContent = user.email;
+});
 
 // إغلاق نافذة الحساب
 function closeModal() {
