@@ -1,175 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>عرض المنتجات</title>
+  <title>عشتار | المنتجات</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f9;
+      background-color: #f5f5f5;
+      direction: rtl;
+    }
+    header {
+      background-color: #003b49; /* لون أزرق بوابة عشتار */
+      color: #f1c40f; /* لون ذهبي */
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo {
+      font-size: 30px;
+      font-weight: bold;
+    }
+    header .icons {
+      display: flex;
+      gap: 15px;
+    }
+    header .icons i {
+      font-size: 20px;
+      cursor: pointer;
     }
     .container {
       max-width: 1200px;
       margin: auto;
       padding: 20px;
     }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    .products-grid {
+    .products {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
+      margin-top: 30px;
     }
-    .product {
-      position: relative;
+    .product-box {
       border: 1px solid #ddd;
       border-radius: 10px;
       background-color: #fff;
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
     }
-    .product:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    .product img {
+    .product-box img {
       width: 100%;
       height: 200px;
       object-fit: cover;
     }
-    .discount-badge {
+    .product-box .details {
+      padding: 10px;
+      text-align: center;
+    }
+    .product-box .details h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .product-box .details .price {
+      font-size: 18px;
+      color: #28a745;
+      font-weight: bold;
+    }
+    .product-box .details .discount {
       position: absolute;
       top: 10px;
       right: 10px;
-      background-color: red;
+      background-color: #ff4747;
       color: white;
-      padding: 5px 10px;
       border-radius: 50%;
-      font-size: 14px;
-      font-weight: bold;
-      z-index: 1;
+      padding: 5px 10px;
     }
-    .product-info {
-      padding: 15px;
-      text-align: left;
+    .product-box .details .minprice {
+      margin-top: 5px;
     }
-    .product-info h2 {
-      font-size: 1.2em;
-      margin: 0 0 10px;
-      color: #333;
+    .product-box:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-    .product-info p {
-      margin: 5px 0;
-    }
-    .price {
-      font-weight: bold;
-      color: #28a745;
-    }
-    .condition {
-      font-style: italic;
-      color: #555;
-    }
-    .add-to-cart {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
+    .empty-cart {
       text-align: center;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    .add-to-cart:hover {
-      background-color: #0056b3;
+      font-size: 18px;
+      color: #555;
     }
   </style>
 </head>
 <body>
+  <header>
+    <div class="logo">عشتار</div>
+    <div class="icons">
+      <i class="fa fa-user"></i> <!-- أيقونة الحساب -->
+      <i class="fa fa-question-circle"></i> <!-- أيقونة المساعدة -->
+      <i class="fa fa-shopping-cart" onclick="window.location.href='cart.html'"></i> <!-- أيقونة السلة -->
+    </div>
+  </header>
+
   <div class="container">
-    <h1>عرض المنتجات</h1>
-    <div class="products-grid" id="productsContainer">جارٍ تحميل المنتجات...</div>
+    <h1>المنتجات</h1>
+    <div class="products" id="productsContainer">جارٍ تحميل المنتجات...</div>
   </div>
 
   <script>
-    const apiUrl = "https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products";
+    // جلب المنتجات من API وعرضها
+    fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products')
+      .then(response => response.json())
+      .then(products => {
+        const productsContainer = document.getElementById('productsContainer');
+        productsContainer.innerHTML = ''; // تفريغ المحتوى
 
-    async function fetchProducts() {
-      const productsContainer = document.getElementById('productsContainer');
+        products.forEach(product => {
+          const productBox = document.createElement('div');
+          productBox.className = 'product-box';
 
-      try {
-        const response = await fetch(apiUrl);
-        if (response.ok) {
-          const products = await response.json();
-
-          if (products.length === 0) {
-            productsContainer.innerHTML = "لا توجد منتجات متاحة.";
-            return;
+          // إعداد الصور من المصفوفة
+          let imagesHtml = '';
+          if (product.images && product.images.length > 0) {
+            imagesHtml = `<img src="${product.images[0].trim()}" alt="صورة المنتج">`;
           }
 
-          productsContainer.innerHTML = ""; // تفريغ المحتوى
-          products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.className = 'product';
+          // إضافة تفاصيل المنتج
+          productBox.innerHTML = `
+            ${imagesHtml || `<img src="https://via.placeholder.com/300" alt="صورة افتراضية">`}
+            <div class="details">
+              <h3>${product.name}</h3>
+              <p class="price">السعر: ${product.minprice} - ${product.maxprice}</p>
+              <div class="discount">خصم</div>
+            </div>
+          `;
 
-            // عند الضغط على المنتج الانتقال لصفحة التفاصيل
-            productDiv.addEventListener('click', () => {
-              window.location.href = `product-details.html?id=${product.id}`;
-            });
+          // إضافة حدث للنقر على المنتج للانتقال إلى صفحة المنتج الواحد
+          productBox.onclick = () => {
+            localStorage.setItem('currentProduct', JSON.stringify(product));
+            window.location.href = 'product.html';
+          };
 
-            // معالجة الصور
-            let imageUrl = 'https://via.placeholder.com/300'; // صورة افتراضية إذا لم تكن هناك صور
-            if (product.images && product.images.length > 0) {
-              imageUrl = product.images[0].trim(); // التأكد من أنه لا توجد مسافات إضافية
-            }
-
-            productDiv.innerHTML = `
-              ${product.discount > 0 ? `<div class="discount-badge">-${product.discount}%</div>` : ''}
-              <img src="${imageUrl}" alt="صورة المنتج">
-              <div class="product-info">
-                <h2>${product.name}</h2>
-                <p><span class="price">السعر الأدنى:</span> ${product.minprice} - <span class="price">السعر الأعلى:</span> ${product.maxprice}</p>
-                <p><span class="condition">الحالة:</span> ${product.condition}</p>
-                <button class="add-to-cart" onclick="addToCart(event, '${product.id}')">إضافة إلى السلة</button>
-              </div>
-            `;
-            productsContainer.appendChild(productDiv);
-          });
-        } else {
-          productsContainer.innerHTML = "حدث خطأ أثناء تحميل المنتجات.";
-        }
-      } catch (error) {
-        console.error(error);
-        productsContainer.innerHTML = "حدث خطأ أثناء الاتصال بالخادم.";
-      }
-    }
-
-    // // إضافة المنتج إلى السلة
-// إضافة المنتج إلى السلة
-function addToCart(event, product) {
-  event.stopPropagation(); // منع تفعيل النقر على العنصر نفسه
-
-  // جلب السلة من localStorage (أو إنشاء مصفوفة جديدة إذا لم توجد)
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  // إضافة المنتج إلى السلة إذا لم يكن موجودًا بالفعل
-  const productExists = cart.some(item => item.id === product.id);
-  if (!productExists) {
-    cart.push(product);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert(`تمت إضافة المنتج ${product.name} إلى السلة!`);
-  } else {
-    alert(`${product.name} موجود بالفعل في السلة.`);
-  }
-}   // جلب المنتجات عند تحميل الصفحة
-    fetchProducts();
+          productsContainer.appendChild(productBox);
+        });
+      })
+      .catch(error => {
+        console.error('Error loading products:', error);
+      });
   </script>
 </body>
 </html>
