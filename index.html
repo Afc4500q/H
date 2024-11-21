@@ -152,19 +152,22 @@
     }
 
     // // إضافة المنتج إلى السلة
+// إضافة المنتج إلى السلة
 function addToCart(event, product) {
   event.stopPropagation(); // منع تفعيل النقر على العنصر نفسه
 
   // جلب السلة من localStorage (أو إنشاء مصفوفة جديدة إذا لم توجد)
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // إضافة المنتج إلى السلة
-  cart.push(product);
-
-  // تخزين السلة في localStorage
-  localStorage.setItem("cart", JSON.stringify(cart));
-
-  alert(`تمت إضافة المنتج ${product.name} إلى السلة!`);
+  // إضافة المنتج إلى السلة إذا لم يكن موجودًا بالفعل
+  const productExists = cart.some(item => item.id === product.id);
+  if (!productExists) {
+    cart.push(product);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(`تمت إضافة المنتج ${product.name} إلى السلة!`);
+  } else {
+    alert(`${product.name} موجود بالفعل في السلة.`);
+  }
 }   // جلب المنتجات عند تحميل الصفحة
     fetchProducts();
   </script>
