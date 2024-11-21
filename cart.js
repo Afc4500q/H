@@ -70,6 +70,9 @@
   <div class="container">
     <h1>سلة المشتريات</h1>
     <div class="cart-items" id="cartItemsContainer">جارٍ تحميل السلة...</div>
+
+    <!-- زر العودة إلى صفحة المنتجات -->
+    <button onclick="window.location.href='index.html'">انتقل إلى صفحة المنتجات</button>
   </div>
 
   <script>
@@ -107,7 +110,7 @@
       });
     }
 
-    // إزالة المنتج من السلة
+    // إزالة منتج من السلة
     function removeFromCart(productId) {
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
