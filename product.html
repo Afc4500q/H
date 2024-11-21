@@ -133,16 +133,16 @@
 
     // إضافة المنتج إلى السلة
     function addToCart(product) {
-  // جلب السلة من localStorage
+  // جلب السلة من localStorage (إذا لم تكن موجودة، تكون مصفوفة فارغة)
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  // تحقق من وجود المنتج بالفعل في السلة باستخدام معرّف المنتج أو اسمه
+  // تحقق من وجود المنتج في السلة (نقوم بالتحقق باستخدام الـ id)
   const productExists = cart.some(item => item.id === product.id);
 
-  // إذا لم يكن المنتج موجودًا، أضفه إلى السلة
   if (!productExists) {
+    // إذا لم يكن المنتج موجودًا، أضفه إلى السلة
     cart.push(product);
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem('cart', JSON.stringify(cart));  // حفظ السلة في localStorage
     alert('تم إضافة المنتج إلى السلة');
   } else {
     alert('المنتج تم إضافته سابقاً');
