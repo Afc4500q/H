@@ -137,53 +137,47 @@
 
   <script>
     // جلب المنتجات من السلة من localStorage وعرضها
-    function loadCart() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const cartItemsContainer = document.getElementById('cartItemsContainer');
-      const totalPriceElement = document.getElementById('totalPrice');
-      cartItemsContainer.innerHTML = ''; // تفريغ المحتوى القديم
-      let totalPrice = 0;
+   function displayCart() {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];  // جلب السلة من localStorage
+  
+  // إذا كانت السلة فارغة
+  if (cart.length === 0) {
+    alert("السلة فارغة");
+    return;
+  }
+  
+  // عرض المنتجات في السلة
+  let cartItems = document.getElementById('cart-items');  // افترض أن لديك عنصر بـ id "cart-items" لعرض السلة
+  cartItems.innerHTML = '';  // إعادة تعيين المحتوى لعرض المنتجات الجديدة
 
-      cart.forEach((product, index) => {
-        const cartItem = document.createElement('div');
-        cartItem.className = 'cart-item';
+  cart.forEach(item => {
+    let productDiv = document.createElement('div');
+    productDiv.classList.add('cart-item');
+    
+    // يمكنك إضافة محتويات المنتج هنا مثل الاسم والسعر والصورة
+    productDiv.innerHTML = `
+      <p>${item.name}</p>
+      <p>${item.minprice} - ${item.maxprice}</p>
+      <img src="${item.images[0]}" alt="${item.name}" style="width: 100px;">
+      <button onclick="removeFromCart(${item.id})">إزالة من السلة</button>
+    `;
+    
+    cartItems.appendChild(productDiv);  // إضافة العنصر إلى السلة
+  });
+}
 
-        // إعداد الصور من المصفوفة
-        let imagesHtml = '';
-        if (product.images && product.images.length > 0) {
-          imagesHtml = `<img src="${product.images[0].trim()}" alt="صورة المنتج">`;
-        }
-
-        // إضافة تفاصيل المنتج
-        cartItem.innerHTML = `
-          ${imagesHtml || `<img src="https://via.placeholder.com/300" alt="صورة افتراضية">`}
-          <div class="details">
-            <h3>${product.name}</h3>
-            <p class="price">السعر: ${product.minprice} - ${product.maxprice}</p>
-            <div class="discount">خصم</div>
-          </div>
-          <button class="remove-btn" onclick="removeFromCart(${index})">حذف</button>
-        `;
-
-        // حساب الإجمالي
-        totalPrice += product.minprice; // يمكن تعديل هذا إذا كنت تريد حساب السعر بشكل مختلف
-
-        cartItemsContainer.appendChild(cartItem);
-      });
-
-      totalPriceElement.textContent = totalPrice;
-    }
-
-    // إزالة المنتج من السلة
-    function removeFromCart(index) {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      loadCart(); // إعادة تحميل السلة بعد الحذف
-    }
-
-    // تحميل السلة عند فتح الصفحة
-    loadCart();
+// إظهار السلة عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', displayCart);
+function removeFromCart(productId) {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  
+  // إزالة المنتج من السلة باستخدام الـ id
+  cart = cart.filter(item => item.id !== productId);
+  localStorage.setItem('cart', JSON.stringify(cart));  // حفظ التغييرات في localStorage
+  
+  // إعادة تحميل السلة لتحديث العرض
+  displayCart();
+}
   </script>
 </body>
 </html>
