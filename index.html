@@ -3,112 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>عشتار - تسجيل الدخول</title>
+  <title>رفع الصور - ImgBB</title>
   <style>
-    /* إعدادات عامة */
     body {
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #28313b, #485461);
-      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 20px;
     }
-
-    .login-container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    .container {
+      max-width: 500px;
+      margin: auto;
       text-align: center;
-      width: 100%;
-      max-width: 400px;
-      color: #333;
     }
-
-    .brand {
-      font-family: 'Georgia', serif;
-      font-size: 36px;
-      color: #d4af37; /* لون ذهبي */
-      margin-bottom: 20px;
+    input[type="file"] {
+      display: block;
+      margin: 20px auto;
     }
-
-    .login-container h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      font-weight: bold;
-      color: #485461;
-    }
-
-    .login-container input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
-    .login-container button {
-      width: 100%;
-      padding: 12px;
-      background: #d4af37; /* نفس لون الشعار */
-      color: #fff;
+    button {
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
       border: none;
-      border-radius: 6px;
-      font-size: 18px;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
-
-    .login-container button:hover {
-      background: #b08f2d; /* لون أغمق قليلاً للزر */
+    button:hover {
+      background-color: #218838;
     }
-
-    .error {
-      color: red;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-
-    .note {
-      font-size: 12px;
-      color: #666;
+    .links {
       margin-top: 20px;
-      line-height: 1.5;
     }
-
-    /* استجابة للشاشات الصغيرة */
-    @media (max-width: 768px) {
-      .login-container {
-        padding: 20px;
-        max-width: 90%;
-      }
-
-      .brand {
-        font-size: 28px;
-      }
-
-      .login-container h1 {
-        font-size: 20px;
-      }
+    .link {
+      word-wrap: break-word;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <div class="brand">عشتار</div>
-    <h1>تسجيل الدخول</h1>
-    <input type="text" id="username" placeholder="اسم المستخدم" />
-    <input type="password" id="password" placeholder="كلمة المرور" />
-    <button onclick="login()">دخول</button>
-    <div class="error" id="error"></div>
-    <div class="note">
-      هذا البوابة مخصصة لمندوبين المبيعات في شركة عشتار، لا يمكنك الوصول بدون المعلومات الصادرة من الشركة حصراً.
-    </div>
+  <div class="container">
+    <h1>رفع الصور إلى ImgBB</h1>
+    <input type="file" id="fileInput" multiple accept="image/*">
+    <button id="uploadButton">رفع الصور</button>
+    <div class="links" id="linksContainer"></div>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    const apiKey = "d18b1dbf4abd1357797f5c62f4409b97"; // مفتاح API الخاص بك
+    const uploadButton = document.getElementById('uploadButton');
+    const fileInput = document.getElementById('fileInput');
+    const linksContainer = document.getElementById('linksContainer');
+
+    uploadButton.addEventListener('click', async () => {
+      const files = fileInput.files;
+      if (files.length === 0) {
+        alert('يرجى اختيار صور للرفع.');
+        return;
+      }
+
+      linksContainer.innerHTML = 'جارٍ رفع الصور...';
+
+      for (let i = 0; i < files.length; i++) {
+        const formData = new FormData();
+        formData.append('image', files[i]);
+
+        try {
+          // رفع الصورة باستخدام API الخاص بـ ImgBB
+          const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const linkElement = document.createElement('div');
+            linkElement.className = 'link';
+            linkElement.innerHTML = `<a href="${data.data.url}" target="_blank">${data.data.url}</a>`;
+            linksContainer.appendChild(linkElement);
+          } else {
+            linksContainer.innerHTML = 'حدث خطأ أثناء رفع الصور.';
+          }
+        } catch (error) {
+          console.error(error);
+          linksContainer.innerHTML = 'حدث خطأ أثناء الاتصال بالخادم.';
+        }
+      }
+    });
+  </script>
 </body>
 </html>
