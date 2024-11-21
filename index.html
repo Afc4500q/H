@@ -151,14 +151,21 @@
       }
     }
 
-    // إضافة المنتج إلى السلة
-    function addToCart(event, productId) {
-      event.stopPropagation(); // منع تفعيل النقر على العنصر نفسه
-      alert(`تمت إضافة المنتج ذو الرقم ${productId} إلى السلة!`);
-      // يمكن هنا تنفيذ عملية الحفظ في localStorage أو إرسال الطلب إلى API.
-    }
+    // // إضافة المنتج إلى السلة
+function addToCart(event, product) {
+  event.stopPropagation(); // منع تفعيل النقر على العنصر نفسه
 
-    // جلب المنتجات عند تحميل الصفحة
+  // جلب السلة من localStorage (أو إنشاء مصفوفة جديدة إذا لم توجد)
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // إضافة المنتج إلى السلة
+  cart.push(product);
+
+  // تخزين السلة في localStorage
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  alert(`تمت إضافة المنتج ${product.name} إلى السلة!`);
+}   // جلب المنتجات عند تحميل الصفحة
     fetchProducts();
   </script>
 </body>
