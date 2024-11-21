@@ -132,16 +132,20 @@
     }
 
     // إضافة المنتج إلى السلة
-    function addToCart() {
+    function addToCart(product) {
+  // جلب السلة من localStorage
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  
-  // التأكد من أن المنتج غير مضاف مسبقًا للسلة
-  if (!cart.some(item => item.id === product.id)) {
+
+  // تحقق من وجود المنتج بالفعل في السلة باستخدام معرّف المنتج أو اسمه
+  const productExists = cart.some(item => item.id === product.id);
+
+  // إذا لم يكن المنتج موجودًا، أضفه إلى السلة
+  if (!productExists) {
     cart.push(product);
     localStorage.setItem('cart', JSON.stringify(cart));
     alert('تم إضافة المنتج إلى السلة');
   } else {
-    alert('المنتج موجود بالفعل في السلة');
+    alert('المنتج تم إضافته سابقاً');
   }
 }
   </script>
