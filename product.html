@@ -132,7 +132,7 @@
     }
 
     // إضافة المنتج إلى السلة
-    function addToCart(product) {
+function addToCart() {
   // جلب السلة من localStorage (إذا لم تكن موجودة، تكون مصفوفة فارغة)
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -142,10 +142,10 @@
   if (!productExists) {
     // إذا لم يكن المنتج موجودًا، أضفه إلى السلة
     cart.push(product);
-    localStorage.setItem('cart', JSON.stringify(cart));  // حفظ السلة في localStorage
+    localStorage.setItem('cart', JSON.stringify(cart)); // حفظ السلة في localStorage
     alert('تم إضافة المنتج إلى السلة');
   } else {
-    alert('المنتج تم إضافته سابقاً');
+    alert('المنتج موجود بالفعل في السلة');
   }
 }
   </script>
