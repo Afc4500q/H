@@ -40,6 +40,7 @@
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
+            overflow: hidden;
         }
 
         .product-images img {
@@ -64,6 +65,13 @@
             margin: 10px 0;
         }
 
+        .price span {
+            display: block;
+            font-size: 18px;
+            color: #333;
+            margin-top: 5px;
+        }
+
         .description {
             font-size: 16px;
             color: #333;
@@ -74,6 +82,13 @@
             font-size: 16px;
             color: #28a745;
             text-align: center;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #555;
+            text-align: center;
+            margin-top: 15px;
         }
 
         button {
@@ -144,9 +159,16 @@
                     }).join('');
                     productDetail.innerHTML = `
                         <div class="product-images">${images}</div>
-                        <div class="price">${product.minprice} - ${product.maxprice} دينار عراقي</div>
+                        <div class="price">
+                            ${product.maxprice} - ${product.minprice} دينار عراقي
+                            <span id="max-price">${product.maxprice} دينار عراقي (السعر الاعلى)</span>
+                            <span id="min-price">${product.minprice} دينار عراقي (السعر الادنى)</span>
+                        </div>
                         <div class="description">${product.description}</div>
                         <div class="status">حالة المنتج: ${product.condition}</div>
+                        <div class="note">
+                            السعر الاعلى هو أعلى سعر يمكن أن يُباع به المنتج، أما السعر الادنى فهو أقل سعر ممكن أن يُباع به المنتج.
+                        </div>
                     `;
 
                     let currentImageIndex = 0;
