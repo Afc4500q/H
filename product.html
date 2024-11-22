@@ -6,34 +6,28 @@
     <title>تفاصيل المنتج</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
         }
 
         header {
-            background-color: #0a3d62;
-            color: white;
-            padding: 10px 20px;
+            background-color: #4a2c16;
+            color: #fff;
+            padding: 15px 0;
             text-align: center;
-            font-size: 24px;
+            font-size: 26px;
         }
 
         .container {
+            width: 90%;
             max-width: 1200px;
             margin: 20px auto;
-            padding: 20px;
             background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 26px;
-            color: #0a3d62;
-            margin-bottom: 20px;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
 
         .product-images {
@@ -41,107 +35,107 @@
             justify-content: center;
             margin-bottom: 20px;
             overflow: hidden;
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
+            position: relative;
         }
 
         .product-images img {
             max-width: 100%;
-            max-height: 300px;
+            height: auto;
+            border-radius: 10px;
             object-fit: contain;
-            border: 2px solid #ddd;
-            border-radius: 8px;
             transition: transform 0.3s ease;
-            margin: 0 10px;
+        }
+
+        .image-navigation {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .image-navigation button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .product-details {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .product-details h2 {
+            font-size: 28px;
+            color: #4a2c16;
+            margin-bottom: 10px;
         }
 
         .price {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
             color: #e58e26;
-            text-align: center;
             margin: 10px 0;
         }
 
         .price span {
-            display: block;
             font-size: 18px;
             color: #333;
+            display: block;
             margin-top: 5px;
         }
 
         .description {
             font-size: 16px;
-            color: #333;
-            margin: 10px 0;
-        }
-
-        .status {
-            font-size: 16px;
-            color: #28a745;
-            text-align: center;
+            color: #555;
+            margin: 20px 0;
         }
 
         .note {
             font-size: 14px;
-            color: #555;
+            color: #888;
+            margin-top: 10px;
             text-align: center;
-            margin-top: 15px;
+        }
+
+        .status {
+            font-size: 18px;
+            color: #28a745;
+            margin-top: 10px;
         }
 
         button {
-            background-color: #0a3d62;
-            color: white;
-            padding: 10px 20px;
+            background-color: #4a2c16;
+            color: #fff;
+            padding: 12px 25px;
             border: none;
             border-radius: 5px;
+            font-size: 18px;
             cursor: pointer;
-            font-size: 16px;
             transition: background-color 0.3s ease;
             display: block;
-            margin: 20px auto;
+            margin: 30px auto;
         }
 
         button:hover {
             background-color: #e58e26;
         }
-
-        .image-controls {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .image-controls button {
-            background-color: #e58e26;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .image-controls button:hover {
-            background-color: #0a3d62;
-        }
     </style>
 </head>
 <body>
-    <header>
-        تفاصيل المنتج
-    </header>
+    <header>تفاصيل المنتج</header>
     
     <div class="container">
         <h1>المنتج</h1>
-        <div id="product-detail">
-            <!-- معلومات المنتج ستظهر هنا -->
+        
+        <div id="product-detail" class="product-details">
+            <!-- محتوى تفاصيل المنتج سيتم هنا -->
         </div>
-        <div class="image-controls">
-            <button id="prevImage">السابق</button>
-            <button id="nextImage">التالي</button>
-        </div>
+        
         <button id="add-to-cart">إضافة إلى السلة</button>
     </div>
 
@@ -154,19 +148,26 @@
                 .then(product => {
                     const productDetail = document.getElementById('product-detail');
                     const images = product.images.map((image, index) => {
-                        return `<img src="${image}" alt="product image" class="${index === 0 ? 'active' : ''}" id="image-${index}">`;
+                        return `<img src="${image}" alt="product image" id="image-${index}" class="product-image">`;
                     }).join('');
+                    
                     productDetail.innerHTML = `
-                        <div class="product-images">${images}</div>
+                        <div class="product-images">
+                            ${images}
+                            <div class="image-navigation">
+                                <button id="prevImage">&#9664;</button>
+                                <button id="nextImage">&#9654;</button>
+                            </div>
+                        </div>
+                        <h2>${product.name}</h2>
                         <div class="price">
-                            ${product.maxprice} - ${product.minprice} دينار عراقي
                             <span id="max-price">${product.maxprice} دينار عراقي</span>
                             <span id="min-price">${product.minprice} دينار عراقي</span>
                         </div>
                         <div class="description">${product.description}</div>
                         <div class="status">حالة المنتج: ${product.condition}</div>
                         <div class="note">
-                            السعر الاعلى هو أعلى سعر يمكن أن يُباع به المنتج، أما السعر الادنى فهو أقل سعر ممكن أن يُباع به المنتج.
+                            السعر الأعلى هو أعلى سعر يمكن أن يُباع به المنتج، أما السعر الأدنى فهو أقل سعر ممكن أن يُباع به المنتج.
                         </div>
                     `;
 
@@ -188,10 +189,7 @@
                     // تحديث الصورة المعروضة
                     function updateImageDisplay() {
                         productImages.forEach((img, index) => {
-                            img.classList.remove('active');
-                            if (index === currentImageIndex) {
-                                img.classList.add('active');
-                            }
+                            img.style.display = (index === currentImageIndex) ? 'block' : 'none';
                         });
                     }
 
@@ -202,6 +200,9 @@
                         localStorage.setItem('cart', JSON.stringify(cart)); // تخزين السلة في localStorage
                         alert('تم إضافة المنتج إلى السلة');
                     };
+
+                    // عرض أول صورة
+                    updateImageDisplay();
                 })
                 .catch(error => console.error('خطأ في جلب بيانات المنتج:', error));
         } else {
