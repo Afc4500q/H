@@ -1,133 +1,4 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنتجات</title>
-    <style>
-        /* إعدادات /* إعدادات عامة */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
-/* الشريط العلوي */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #002855; /* الأزرق الداكن المستوحى من بوابة عشتار */
-    color: white;
-    padding: 15px 20px;
-}
-
-.navbar .title {
-    font-family: "Amiri", serif; /* الخط الكوفي */
-    font-size: 24px;
-    font-weight: bold;
-    color: #ffcc00; /* الذهبي */
-}
-
-.navbar .icons {
-    display: flex;
-    gap: 20px;
-}
-
-.navbar .icons i {
-    font-size: 20px;
-    cursor: pointer;
-    color: white;
-    transition: color 0.3s ease;
-}
-
-.navbar .icons i:hover {
-    color: #ffcc00; /* الذهبي */
-}
-
-/* المنتجات */
-#products-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 20px;
-}
-
-.product {
-    background-color: #002855; /* الأزرق الداكن */
-    border: 2px solid #ffcc00; /* الذهبي */
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
-    padding: 15px;
-    width: 280px;
-    text-align: center;
-    color: white;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.product:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.product img {
-    max-width: 100%;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ffcc00; /* إطار ذهبي حول الصورة */
-}
-
-.product h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #ffcc00; /* الذهبي */
-}
-
-.product p {
-    margin: 5px 0;
-    color: #f4f4f4; /* لون أفتح للنص */
-}
-
-.product button {
-    background-color: #ffcc00; /* الذهبي */
-    color: #002855; /* الأزرق الداكن */
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.product button:hover {
-    background-color: #e6b800; /* درجة أغمق من الذهبي */
-    transform: scale(1.1);
-}
-    </style>
-
-    <!-- استيراد أيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&display=swap">
-</head>
-<body>
-
-    <!-- الشريط العلوي -->
-    <div class="navbar">
-        <div class="title">عشتار</div>
-        <div class="icons">
-            <i class="fas fa-user" title="الحساب"></i>
-            <i class="fas fa-shopping-cart" title="السلة"></i>
-            <i class="fas fa-headset" title="الدعم"></i>
-        </div>
-    </div>
-
-    <!-- قائمة المنتجات -->
-    <h1 style="text-align: center; margin-top: 20px;">المنتجات</h1>
-    <div id="products-list"></div>
-
-    <script>
-        fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products') // استبدل برابط الـ API الفعلي
+fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products')
     .then(response => response.json())
     .then(products => {
         const productsList = document.getElementById('products-list');
@@ -135,15 +6,23 @@ body {
             const productElement = document.createElement('div');
             productElement.classList.add('product');
 
-            // عرض الصورة الأولى فقط
+            // عرض الصورة الأولى فقط لكل منتج
             const productImage = product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/150';
 
+            // إنشاء البوكس مع التنسيقات
             productElement.innerHTML = `
-                <h2>${product.name}</h2>
                 <img src="${productImage}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150';">
-                <p>السعر: ${product.minprice} - ${product.maxprice}</p>
-                <p>حالة المنتج: ${product.condition}</p>
-                <button onclick="viewProductDetails(${product.id})">عرض التفاصيل</button>
+                <div class="info">
+                    <h2>${product.name}</h2>
+                    <p>حالة المنتج: ${product.condition}</p>
+                    <p class="price">${product.minprice} - ${product.maxprice} دينار</p>
+                    <div class="icons">
+                        <span class="icon" title="إضافة للمفضلة">💖</span>
+                        <span class="icon" title="مشاركة المنتج">📤</span>
+                        <span class="icon" title="تقييم المنتج">⭐</span>
+                    </div>
+                    <button onclick="viewProductDetails(${product.id})">عرض التفاصيل</button>
+                </div>
             `;
             productsList.appendChild(productElement);
         });
@@ -156,6 +35,3 @@ function viewProductDetails(productId) {
     // الانتقال إلى صفحة تفاصيل المنتج
     window.location.href = 'product.html';
 }
-    </script>
-</body>
-</html>
