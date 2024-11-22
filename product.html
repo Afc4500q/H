@@ -5,32 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تفاصيل المنتج</title>
   <style>
+    /* Styles */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
+      background-color: green;
       direction: rtl;
     }
     header {
-      background-color: #003b49; /* لون أزرق بوابة عشتار */
-      color: #f1c40f; /* لون ذهبي */
+      background-color: #003b49;
+      color: #f1c40f;
       padding: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-    }
-    header .logo {
-      font-size: 30px;
-      font-weight: bold;
-    }
-    header .icons {
-      display: flex;
-      gap: 15px;
-    }
-    header .icons i {
-      font-size: 20px;
-      cursor: pointer;
     }
     .container {
       max-width: 1200px;
@@ -39,32 +28,18 @@
     }
     .product-details {
       display: flex;
-      flex-direction: column;
       gap: 20px;
-      margin-top: 30px;
     }
-    .image-gallery {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+    .product-details .image-gallery {
+      flex: 1;
     }
-    .image-gallery img {
+    .product-details .image-gallery img {
       width: 100%;
-      max-width: 300px;
-      height: auto;
-      border: 1px solid #ddd;
-      border-radius: 5px;
+      height: 400px;
+      object-fit: contain;
     }
-    .info h2 {
-      color: #333;
-    }
-    .info p {
-      color: #555;
-    }
-    .price {
-      font-size: 20px;
-      color: #28a745;
-      font-weight: bold;
+    .product-details .info {
+      flex: 1;
     }
     .add-to-cart-btn {
       background-color: #003b49;
@@ -73,10 +48,6 @@
       padding: 10px 20px;
       cursor: pointer;
       border-radius: 5px;
-      font-size: 18px;
-    }
-    .add-to-cart-btn:hover {
-      background-color: #ff4747;
     }
   </style>
 </head>
@@ -84,19 +55,16 @@
   <header>
     <div class="logo">عشتار</div>
     <div class="icons">
-      <i class="fa fa-user"></i>
-      <i class="fa fa-question-circle"></i>
       <i class="fa fa-shopping-cart" onclick="window.location.href='cart.html'"></i>
     </div>
   </header>
 
   <div class="container">
     <div class="product-details" id="productDetails">
-      <div class="image-gallery" id="imageGallery">
-        <!-- سيتم إضافة الصور هنا -->
-      </div>
+      <div class="image-gallery" id="imageGallery"></div>
       <div class="info">
         <h2 id="productName"></h2>
+        <p id="productDescription"></p>
         <p class="price" id="productPrice"></p>
         <button class="add-to-cart-btn" onclick="addToCart()">إضافة إلى السلة</button>
       </div>
@@ -104,36 +72,42 @@
   </div>
 
   <script>
-    // 1. جلب بيانات المنتج من localStorage
-    const product = JSON.parse(localStorage.getItem('currentProduct'));
+    const product = {
+      "id": 1,
+      "name": "منتج 1",
+      "description": "وصف المنتج",
+      "minprice": 100,
+      "maxprice": 200,
+      "images": [
+        "https://i.ibb.co/R7609pr/IMG-6290.png",
+        "https://i.ibb.co/1dTxHVk/IMG-6289.png",
+        "https://i.ibb.co/wRzw0n9/IMG-6288.png"
+      ]
+    };
 
-    if (product) {
-      // 2. عرض تفاصيل المنتج
-      document.getElementById('productName').textContent = product.name;
-      document.getElementById('productPrice').textContent = `السعر: ${product.minprice} - ${product.maxprice}`;
+    // Display product details
+    document.getElementById('productName').textContent = product.name;
+    document.getElementById('productDescription').textContent = product.description;
+    document.getElementById('productPrice').textContent = `السعر: ${product.minprice} - ${product.maxprice}`;
 
-      // 3. عرض الصور في معرض الصور
-      const imageGallery = document.getElementById('imageGallery');
-      product.images.forEach(imageUrl => {
-        const imgElement = document.createElement('img');
-        imgElement.src = imageUrl.trim();
-        imageGallery.appendChild(imgElement);
-      });
-    } else {
-      alert("لم يتم العثور على المنتج");
-      window.location.href = 'index.html'; // الرجوع إلى الصفحة الرئيسية
-    }
+    const imageGallery = document.getElementById('imageGallery');
+    product.images.forEach(imageUrl => {
+      const imgElement = document.createElement('img');
+      imgElement.src = imageUrl;
+      imageGallery.appendChild(imgElement);
+    });
 
-    // 4. إضافة المنتج إلى السلة
     function addToCart() {
-      // جلب السلة من localStorage (أو مصفوفة فارغة إذا لم تكن موجودة)
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const productExists = cart.some(item => item.id === product.id);
 
-      // إضافة المنتج إلى السلة
-      cart.push(product);
-      localStorage.setItem('cart', JSON.stringify(cart));
-
-      alert('تمت إضافة المنتج إلى السلة');
+      if (!productExists) {
+        cart.push(product);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        alert('تم إضافة المنتج إلى السلة');
+      } else {
+        alert('المنتج تم إضافته سابقاً');
+      }
     }
   </script>
 </body>
