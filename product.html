@@ -148,6 +148,13 @@ function addToCart() {
     alert('المنتج موجود بالفعل في السلة');
   }
 }
+
+    function viewProduct(product) {
+  // حفظ بيانات المنتج في localStorage
+  localStorage.setItem('currentProduct', JSON.stringify(product));
+  // الانتقال إلى صفحة المنتج الواحد
+  window.location.href = 'products.html';
+}
   </script>
 </body>
 </html>
