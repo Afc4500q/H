@@ -4,27 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المنتجات</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .product { margin-bottom: 20px; }
+        .product img { max-width: 100px; }
+        .product button { margin-top: 10px; }
+    </style>
 </head>
 <body>
     <h1>المنتجات</h1>
     <div id="products-list"></div>
 
     <script>
-        fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products')
+        fetch('YOUR_API_URL') // استبدل بـ رابط الـ API الفعلي
             .then(response => response.json())
             .then(products => {
                 const productsList = document.getElementById('products-list');
                 products.forEach(product => {
                     const productElement = document.createElement('div');
+                    productElement.classList.add('product');
                     productElement.innerHTML = `
                         <h2>${product.name}</h2>
-                        <img src="${product.avatar}" alt="${product.name}" width="100">
+                        <img src="${product.avatar}" alt="${product.name}">
                         <p>السعر: ${product.minprice} - ${product.maxprice}</p>
-                        <button onclick="window.location.href='product.html?id=${product.id}'">عرض التفاصيل</button>
+                        <p>حالة المنتج: ${product.condition}</p>
+                        <button onclick="viewProductDetails(${product.id})">عرض التفاصيل</button>
                     `;
                     productsList.appendChild(productElement);
                 });
-            });
+            })
+            .catch(error => console.error('خطأ في جلب البيانات:', error));
+
+        function viewProductDetails(productId) {
+            // تخزين ID المنتج في localStorage
+            localStorage.setItem('selectedProductId', productId);
+            // الانتقال إلى صفحة تفاصيل المنتج
+            window.location.href = 'product.html';
+        }
     </script>
 </body>
 </html>
