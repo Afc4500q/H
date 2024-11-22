@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>عشتار | السلة</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>سلة المنتجات</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,8 +13,8 @@
       direction: rtl;
     }
     header {
-      background-color: #003b49;
-      color: #f1c40f;
+      background-color: #003b49; /* لون أزرق بوابة عشتار */
+      color: #f1c40f; /* لون ذهبي */
       padding: 20px;
       display: flex;
       justify-content: space-between;
@@ -30,9 +29,8 @@
       gap: 15px;
     }
     header .icons i {
-      font-size: 24px;
+      font-size: 20px;
       cursor: pointer;
-      color: white;
     }
     .container {
       max-width: 1200px;
@@ -40,78 +38,55 @@
       padding: 20px;
     }
     .cart-items {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      display: flex;
+      flex-direction: column;
       gap: 20px;
       margin-top: 30px;
     }
     .cart-item {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: #fff;
       border: 1px solid #ddd;
+      padding: 15px;
       border-radius: 10px;
-      background-color: #fff;
-      overflow: hidden;
-      position: relative;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     .cart-item img {
-      width: 100%;
-      height: 200px;
+      width: 100px;
+      height: 100px;
       object-fit: contain;
+      border-radius: 5px;
     }
-    .cart-item .details {
-      padding: 10px;
-      text-align: center;
+    .cart-item .info {
+      flex: 1;
     }
-    .cart-item .details h3 {
+    .cart-item .info h4 {
+      margin: 0;
       color: #333;
-      margin-bottom: 10px;
     }
-    .cart-item .details .price {
-      font-size: 18px;
-      color: #28a745;
-      font-weight: bold;
+    .cart-item .info p {
+      margin: 5px 0;
+      color: #555;
     }
-    .cart-item .details .discount {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #ff4747;
-      color: white;
-      border-radius: 50%;
-      padding: 5px 10px;
-    }
-    .cart-item .remove-btn {
-      position: absolute;
-      top: 10px;
-      left: 10px;
+    .remove-btn {
       background-color: #ff4747;
       color: white;
       border: none;
-      padding: 5px 10px;
+      padding: 10px;
       cursor: pointer;
       border-radius: 5px;
+      font-size: 14px;
     }
-    .cart-summary {
-      margin-top: 20px;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .remove-btn:hover {
+      background-color: #d62c2c;
     }
-    .cart-summary .total {
-      font-size: 24px;
-      color: #28a745;
-      font-weight: bold;
-    }
-    .cart-summary .checkout-btn {
-      background-color: #003b49;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      font-size: 18px;
-      width: 100%;
-      margin-top: 10px;
-      border-radius: 5px;
+    .empty-cart {
+      text-align: center;
+      color: #555;
+      font-size: 20px;
+      margin-top: 50px;
     }
   </style>
 </head>
@@ -119,65 +94,65 @@
   <header>
     <div class="logo">عشتار</div>
     <div class="icons">
-      <i class="fas fa-user"></i>
-      <i class="fas fa-question-circle"></i>
-      <i class="fas fa-shopping-cart" onclick="window.location.href='cart.html'"></i>
+      <i class="fa fa-home" onclick="window.location.href='index.html'"></i>
+      <i      class="fa fa-user" onclick="alert('صفحة الحساب الشخصي قيد الإنشاء!')"></i>
+      <i class="fa fa-shopping-cart"></i>
     </div>
   </header>
 
   <div class="container">
-    <h1>السلة</h1>
-    <div class="cart-items" id="cartItemsContainer">جارٍ تحميل السلة...</div>
-
-    <div class="cart-summary">
-      <p class="total">إجمالي السعر: <span id="totalPrice">0</span> دينار</p>
-      <button class="checkout-btn" onclick="window.location.href='checkout.html'">إتمام الشراء</button>
+    <div id="cartItems" class="cart-items">
+      <!-- سيتم عرض المنتجات هنا -->
+    </div>
+    <div id="emptyCartMessage" class="empty-cart" style="display: none;">
+      السلة فارغة حاليًا!
     </div>
   </div>
 
   <script>
-    // جلب المنتجات من السلة من localStorage وعرضها
-   function displayCart() {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];  // جلب السلة من localStorage
-  
-  // إذا كانت السلة فارغة
-  if (cart.length === 0) {
-    alert("السلة فارغة");
-    return;
-  }
-  
-  // عرض المنتجات في السلة
-  let cartItems = document.getElementById('cart-items');  // افترض أن لديك عنصر بـ id "cart-items" لعرض السلة
-  cartItems.innerHTML = '';  // إعادة تعيين المحتوى لعرض المنتجات الجديدة
+    // جلب المنتجات من السلة (localStorage)
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  cart.forEach(item => {
-    let productDiv = document.createElement('div');
-    productDiv.classList.add('cart-item');
-    
-    // يمكنك إضافة محتويات المنتج هنا مثل الاسم والسعر والصورة
-    productDiv.innerHTML = `
-      <p>${item.name}</p>
-      <p>${item.minprice} - ${item.maxprice}</p>
-      <img src="${item.images[0]}" alt="${item.name}" style="width: 100px;">
-      <button onclick="removeFromCart(${item.id})">إزالة من السلة</button>
-    `;
-    
-    cartItems.appendChild(productDiv);  // إضافة العنصر إلى السلة
-  });
-}
+    const cartItemsContainer = document.getElementById('cartItems');
+    const emptyCartMessage = document.getElementById('emptyCartMessage');
 
-// إظهار السلة عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', displayCart);
-function removeFromCart(productId) {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  
-  // إزالة المنتج من السلة باستخدام الـ id
-  cart = cart.filter(item => item.id !== productId);
-  localStorage.setItem('cart', JSON.stringify(cart));  // حفظ التغييرات في localStorage
-  
-  // إعادة تحميل السلة لتحديث العرض
-  displayCart();
-}
+    // التحقق إذا كانت السلة فارغة
+    if (cart.length === 0) {
+      emptyCartMessage.style.display = 'block';
+    } else {
+      emptyCartMessage.style.display = 'none';
+
+      // عرض المنتجات في السلة
+      cart.forEach(product => {
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('cart-item');
+
+        // محتوى المنتج
+        cartItem.innerHTML = `
+          <img src="${product.images[0]}" alt="${product.name}">
+          <div class="info">
+            <h4>${product.name}</h4>
+            <p>السعر: ${product.minprice} - ${product.maxprice}</p>
+          </div>
+          <button class="remove-btn" onclick="removeFromCart(${product.id})">إزالة</button>
+        `;
+
+        cartItemsContainer.appendChild(cartItem);
+      });
+    }
+
+    // إزالة منتج من السلة
+    function removeFromCart(productId) {
+      // فلترة المنتجات واستبعاد المنتج المحدد
+      const updatedCart = cart.filter(product => product.id !== productId);
+
+      // تحديث localStorage
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+      // إعادة تحميل الصفحة لتحديث السلة
+      alert('تم إزالة المنتج من السلة');
+      window.location.reload();
+    }
   </script>
 </body>
 </html>
