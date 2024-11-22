@@ -41,6 +41,9 @@
             justify-content: center;
             margin-bottom: 20px;
             overflow: hidden;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .product-images img {
@@ -51,10 +54,6 @@
             border-radius: 8px;
             transition: transform 0.3s ease;
             margin: 0 10px;
-        }
-
-        .product-images img.active {
-            transform: scale(1.1);
         }
 
         .price {
@@ -161,8 +160,8 @@
                         <div class="product-images">${images}</div>
                         <div class="price">
                             ${product.maxprice} - ${product.minprice} دينار عراقي
-                            <span id="max-price">${product.maxprice} دينار عراقي (السعر الاعلى)</span>
-                            <span id="min-price">${product.minprice} دينار عراقي (السعر الادنى)</span>
+                            <span id="max-price">${product.maxprice} دينار عراقي</span>
+                            <span id="min-price">${product.minprice} دينار عراقي</span>
                         </div>
                         <div class="description">${product.description}</div>
                         <div class="status">حالة المنتج: ${product.condition}</div>
