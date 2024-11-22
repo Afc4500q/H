@@ -5,32 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سلة المنتجات</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .cart-item { margin-bottom: 20px; }
-        .cart-item img { max-width: 100px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .cart-item {
+            background-color: white;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-item img {
+            max-width: 100px;
+            border-radius: 8px;
+        }
+        .cart-item-details {
+            flex: 1;
+            padding-left: 15px;
+        }
+        .cart-item h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .cart-item p {
+            margin: 5px 0;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+        .quantity-controls input {
+            width: 40px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        .cart-item button {
+            padding: 8px 15px;
+            background-color: #ff4b5c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .cart-item button:hover {
+            background-color: #f44336;
+        }
+        #total-price {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        #empty-cart {
+            padding: 10px 20px;
+            background-color: #00c853;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        #empty-cart:hover {
+            background-color: #1b5e20;
+        }
     </style>
 </head>
 <body>
-    <h1>السلة </h1>
+    <h1>سلة المنتجات</h1>
     <div id="cart-items"></div>
+    <div id="total-price">الإجمالي: 0.00</div>
+    <button id="empty-cart">إفراغ السلة</button>
 
     <script>
-        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-        const cartContainer = document.getElementById('cart-items');
+        function updateCart() {
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartContainer = document.getElementById('cart-items');
+            const totalPriceContainer = document.getElementById('total-price');
 
-        if (cartItems.length === 0) {
-            cartContainer.innerHTML = '<p>السلة فارغة</p>';
-        } else {
-            cartItems.forEach(item => {
-                cartContainer.innerHTML += `
-                    <div class="cart-item">
-                        <h2>${item.name}</h2>
-                        <p>السعر: ${item.minprice} - ${item.maxprice}</p>
+            cartContainer.innerHTML = ''; // إعادة تحميل السلة من جديد
+
+            let totalPrice = 0;
+
+            if (cartItems.length === 0) {
+                cartContainer.innerHTML = '<p>السلة فارغة</p>';
+                totalPriceContainer.innerHTML = 'الإجمالي: 0.00';
+            } else {
+                cartItems.forEach((item, index) => {
+                    const itemTotalPrice = item.minprice * item.quantity;
+                    totalPrice += itemTotalPrice;
+
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.classList.add('cart-item');
+                    cartItemElement.innerHTML = `
                         <img src="${item.avatar}" alt="${item.name}">
-                    </div>
-                `;
-            });
+                        <div class="cart-item-details">
+                            <h2>${item.name}</h2>
+                            <p>السعر: ${item.minprice} - ${item.maxprice}</p>
+                            <div class="quantity-controls">
+                                <button onclick="updateQuantity(${index}, -1)">-</button>
+                                <input type="text" value="${item.quantity}" readonly>
+                                <button onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                        <button onclick="removeItem(${index})">حذف المنتج</button>
+                    `;
+                    cartContainer.appendChild(cartItemElement);
+                });
+
+                totalPriceContainer.innerHTML = `الإجمالي: ${totalPrice.toFixed(2)} دينار`;
+            }
         }
+
+        function updateQuantity(index, change) {
+            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const item = cartItems[index];
+
+            // تعديل الكمية، مع التأكد من أنها لا تصبح أقل من 1
+            item.quantity = Math.max(1, item.quantity + change);
+
+            // تحديث السلة في localStorage
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+
+            updateCart(); // تحديث السلة
+        }
+
+        function removeItem(index) {
+            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            cartItems.splice(index, 1); // حذف المنتج من السلة
+            localStorage.setItem('cart', JSON.stringify(cartItems)); // تخزين السلة الجديدة
+
+            updateCart(); // تحديث السلة بعد الحذف
+        }
+
+        document.getElementById('empty-cart').onclick = () => {
+            localStorage.removeItem('cart'); // إفراغ السلة
+            updateCart(); // تحديث السلة بعد الإفراغ
+        };
+
+        // تحديث السلة عند تحميل الصفحة
+        updateCart();
     </script>
 </body>
 </html>
