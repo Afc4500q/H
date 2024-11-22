@@ -1,103 +1,39 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تفاصيل المنتج</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f5f5f5;
-      direction: rtl;
-    }
-    header {
-      background-color: #003b49;
-      color: #f1c40f;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 20px;
-    }
-    .product-details {
-      display: flex;
-      gap: 20px;
-    }
-    .product-details .image-gallery {
-      flex: 1;
-    }
-    .product-details .image-gallery img {
-      width: 100%;
-      height: 400px;
-      object-fit: contain;
-    }
-    .product-details .info {
-      flex: 1;
-    }
-    .add-to-cart-btn {
-      background-color: #003b49;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج</title>
 </head>
 <body>
-  <header>
-    <div class="logo">عشتار</div>
-    <div class="icons">
-      <i class="fa fa-shopping-cart" onclick="window.location.href='cart.html'"></i>
-    </div>
-  </header>
+    <h1>تفاصيل المنتج</h1>
+    <div id="product-detail"></div>
+    <button id="add-to-cart">إضافة إلى السلة</button>
 
-  <div class="container">
-    <div class="product-details" id="productDetails">
-      <div class="image-gallery" id="imageGallery"></div>
-      <div class="info">
-        <h2 id="productName"></h2>
-        <p id="productDescription"></p>
-        <p class="price" id="productPrice"></p>
-        <button class="add-to-cart-btn" onclick="addToCart()">إضافة إلى السلة</button>
-      </div>
-    </div>
-  </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
 
-  <script>
-    // جلب المنتج من localStorage وعرض التفاصيل
-    const product = JSON.parse(localStorage.getItem('currentProduct'));
+        fetch(`YOUR_API_URL/${productId}`)
+            .then(response => response.json())
+            .then(product => {
+                const productDetail = document.getElementById('product-detail');
+                productDetail.innerHTML = `
+                    <h2>${product.name}</h2>
+                    <p>${product.description}</p>
+                    <p>السعر: ${product.minprice} - ${product.maxprice}</p>
+                    <div>
+                        ${product.images.map(image => `<img src="${image}" alt="product image" width="200">`).join('')}
+                    </div>
+                `;
 
-    if (product) {
-      document.getElementById('productName').textContent = product.name;
-      document.getElementById('productDescription').textContent = product.description;
-      document.getElementById('productPrice').textContent = `السعر: ${product.price}`;
-
-      // عرض الصور في معرض الصور
-      const imageGallery = document.getElementById('imageGallery');
-      product.images.forEach(imageUrl => {
-        const imgElement = document.createElement('img');
-        imgElement.src = imageUrl;
-        imageGallery.appendChild(imgElement);
-      });
-    } else {
-      alert("لم يتم العثور على المنتج");
-      window.location.href = 'index.html'; // الرجوع إلى الصفحة الرئيسية
-    }
-
-    function addToCart() {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      // إضافة المنتج إلى السلة
-      cart.push(product);
-      localStorage.setItem('cart', JSON.stringify(cart)); // حفظ السلة في localStorage
-      alert('تم إضافة المنتج إلى السلة');
-    }
-  </script>
+                document.getElementById('add-to-cart').onclick = () => {
+                    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    cart.push(product);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    alert('تم إضافة المنتج إلى السلة');
+                };
+            });
+    </script>
 </body>
 </html>
