@@ -39,31 +39,26 @@
     }
     .product-details {
       display: flex;
+      flex-direction: column;
       gap: 20px;
       margin-top: 30px;
     }
-
-    .product-box img {
-  width: 100%;
-  height: 200px; /* تحديد ارتفاع ثابت */
-  object-fit: contain; /* عرض الصورة بالكامل دون القص */
-}
-    
-    .product-details .image-gallery {
-      flex: 1;
+    .image-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
- .product-details .image-gallery img {
-  width: 100%;
-  height: 400px; /* تحديد ارتفاع ثابت */
-  object-fit: contain; /* عرض الصورة بالكامل دون القص */
-}
-    .product-details .info {
-      flex: 1;
+    .image-gallery img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
     }
-    .product-details .info h2 {
+    .info h2 {
       color: #333;
     }
-    .product-details .info p {
+    .info p {
       color: #555;
     }
     .price {
@@ -102,7 +97,6 @@
       </div>
       <div class="info">
         <h2 id="productName"></h2>
-        <p id="productDescription"></p>
         <p class="price" id="productPrice"></p>
         <button class="add-to-cart-btn" onclick="addToCart()">إضافة إلى السلة</button>
       </div>
@@ -110,15 +104,15 @@
   </div>
 
   <script>
-    // جلب المنتج من localStorage وعرض التفاصيل
+    // 1. جلب بيانات المنتج من localStorage
     const product = JSON.parse(localStorage.getItem('currentProduct'));
 
     if (product) {
+      // 2. عرض تفاصيل المنتج
       document.getElementById('productName').textContent = product.name;
-      document.getElementById('productDescription').textContent = product.description;
       document.getElementById('productPrice').textContent = `السعر: ${product.minprice} - ${product.maxprice}`;
 
-      // عرض الصور في معرض الصور
+      // 3. عرض الصور في معرض الصور
       const imageGallery = document.getElementById('imageGallery');
       product.images.forEach(imageUrl => {
         const imgElement = document.createElement('img');
@@ -126,35 +120,21 @@
         imageGallery.appendChild(imgElement);
       });
     } else {
-      // إذا لم يتم العثور على المنتج في localStorage
       alert("لم يتم العثور على المنتج");
-      window.location.href = 'index.html'; // الرجوع إلى الصفحة الرئيسية إذا لم يكن المنتج موجودًا
+      window.location.href = 'index.html'; // الرجوع إلى الصفحة الرئيسية
     }
 
-    // إضافة المنتج إلى السلة
-function addToCart() {
-  // جلب السلة من localStorage (إذا لم تكن موجودة، تكون مصفوفة فارغة)
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    // 4. إضافة المنتج إلى السلة
+    function addToCart() {
+      // جلب السلة من localStorage (أو مصفوفة فارغة إذا لم تكن موجودة)
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  // تحقق من وجود المنتج في السلة (نقوم بالتحقق باستخدام الـ id)
-  const productExists = cart.some(item => item.id === product.id);
+      // إضافة المنتج إلى السلة
+      cart.push(product);
+      localStorage.setItem('cart', JSON.stringify(cart));
 
-  if (!productExists) {
-    // إذا لم يكن المنتج موجودًا، أضفه إلى السلة
-    cart.push(product);
-    localStorage.setItem('cart', JSON.stringify(cart)); // حفظ السلة في localStorage
-    alert('تم إضافة المنتج إلى السلة');
-  } else {
-    alert('المنتج موجود بالفعل في السلة');
-  }
-}
-
-    function viewProduct(product) {
-  // حفظ بيانات المنتج في localStorage
-  localStorage.setItem('currentProduct', JSON.stringify(product));
-  // الانتقال إلى صفحة المنتج الواحد
-  window.location.href = 'products.html';
-}
+      alert('تمت إضافة المنتج إلى السلة');
+    }
   </script>
 </body>
 </html>
