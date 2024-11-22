@@ -5,31 +5,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تفاصيل المنتج</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .product-images img { max-width: 200px; margin-right: 10px; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0a3d62;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            color: #0a3d62;
+            margin-bottom: 20px;
+        }
+
+        .product-images {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .product-images img {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .product-images img.active {
+            transform: scale(1.1);
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e58e26;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .description {
+            font-size: 16px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .status {
+            font-size: 16px;
+            color: #28a745;
+            text-align: center;
+        }
+
+        button {
+            background-color: #0a3d62;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        button:hover {
+            background-color: #e58e26;
+        }
+
+        .image-controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .image-controls button {
+            background-color: #e58e26;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .image-controls button:hover {
+            background-color: #0a3d62;
+        }
     </style>
 </head>
 <body>
-    <h1>تفاصيل المنتج</h1>
-    <div id="product-detail"></div>
-    <button id="add-to-cart">إضافة إلى السلة</button>
+    <header>
+        تفاصيل المنتج
+    </header>
+    
+    <div class="container">
+        <h1>المنتج</h1>
+        <div id="product-detail">
+            <!-- معلومات المنتج ستظهر هنا -->
+        </div>
+        <div class="image-controls">
+            <button id="prevImage">السابق</button>
+            <button id="nextImage">التالي</button>
+        </div>
+        <button id="add-to-cart">إضافة إلى السلة</button>
+    </div>
 
     <script>
         const productId = localStorage.getItem('selectedProductId'); // جلب ID المنتج من localStorage
 
         if (productId) {
-            fetch(`https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products/${productId}`) // استبدل بـ رابط الـ API الفعلي
+            fetch(`https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products/${productId}`)
                 .then(response => response.json())
                 .then(product => {
                     const productDetail = document.getElementById('product-detail');
-                    const images = product.images.map(image => `<img src="${image}" alt="product image">`).join('');
+                    const images = product.images.map((image, index) => {
+                        return `<img src="${image}" alt="product image" class="${index === 0 ? 'active' : ''}" id="image-${index}">`;
+                    }).join('');
                     productDetail.innerHTML = `
-                        <h2>${product.name}</h2>
-                        <p>${product.description}</p>
-                        <p>السعر: ${product.minprice} - ${product.maxprice}</p>
-                        <p>حالة المنتج: ${product.condition}</p>
                         <div class="product-images">${images}</div>
+                        <div class="price">${product.minprice} - ${product.maxprice} دينار عراقي</div>
+                        <div class="description">${product.description}</div>
+                        <div class="status">حالة المنتج: ${product.condition}</div>
                     `;
+
+                    let currentImageIndex = 0;
+                    const productImages = document.querySelectorAll('.product-images img');
+
+                    // الانتقال إلى الصورة التالية
+                    document.getElementById('nextImage').onclick = () => {
+                        currentImageIndex = (currentImageIndex + 1) % productImages.length;
+                        updateImageDisplay();
+                    };
+
+                    // الانتقال إلى الصورة السابقة
+                    document.getElementById('prevImage').onclick = () => {
+                        currentImageIndex = (currentImageIndex - 1 + productImages.length) % productImages.length;
+                        updateImageDisplay();
+                    };
+
+                    // تحديث الصورة المعروضة
+                    function updateImageDisplay() {
+                        productImages.forEach((img, index) => {
+                            img.classList.remove('active');
+                            if (index === currentImageIndex) {
+                                img.classList.add('active');
+                            }
+                        });
+                    }
 
                     // إضافة المنتج إلى السلة
                     document.getElementById('add-to-cart').onclick = () => {
