@@ -62,6 +62,7 @@
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
             padding: 20px;
+            text-align: center;
         }
 
         .product:hover {
@@ -77,7 +78,6 @@
         }
 
         .product .info {
-            text-align: center;
             margin-top: 15px;
         }
 
@@ -89,10 +89,11 @@
         }
 
         .product .price-section {
+            margin-top: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
+            gap: 20px;
         }
 
         .product .price-section .price {
@@ -104,6 +105,7 @@
         .product .price-section .old-price {
             font-size: 16px;
             color: #888;
+            text-decoration: line-through;
         }
 
         .product .price-section .discount {
@@ -141,10 +143,9 @@
     <header>
         <h1>عشتار</h1>
         <nav>
-            <!-- أيقونات الحساب، السلة، والدعم -->
-            <a href="#"><i class="icon">👤</i></a>
-            <a href="#"><i class="icon">🛒</i></a>
-            <a href="#"><i class="icon">📞</i></a>
+            <a href="#"><i class="icon">👤</i> حساب</a>
+            <a href="#"><i class="icon">🛒</i> سلة</a>
+            <a href="#"><i class="icon">📞</i> دعم</a>
         </nav>
     </header>
 
