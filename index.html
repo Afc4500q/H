@@ -37,7 +37,6 @@
             color: white;
             text-decoration: none;
             font-size: 16px;
-            font-weight: bold;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -62,6 +61,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
+            padding: 20px;
         }
 
         .product:hover {
@@ -71,51 +71,54 @@
 
         .product img {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: 300px;
+            object-fit: contain;
             border-bottom: 1px solid #ddd;
         }
 
         .product .info {
-            padding: 15px;
             text-align: center;
+            margin-top: 15px;
         }
 
         .product h2 {
-            font-size: 18px;
+            font-size: 20px;
             color: #0a3d62;
             margin: 10px 0;
             font-weight: bold;
         }
 
-        .product p {
-            font-size: 14px;
-            color: #666;
-            margin: 5px 0;
+        .product .price-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
         }
 
-        .product .price {
-            font-size: 16px;
+        .product .price-section .price {
+            font-size: 18px;
             font-weight: bold;
             color: #e58e26;
         }
 
-        .product .icons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
+        .product .price-section .old-price {
+            font-size: 16px;
+            color: #888;
+            text-decoration: line-through;
         }
 
-        .product .icon {
-            font-size: 20px;
-            color: #0a3d62;
-            cursor: pointer;
-            transition: color 0.3s;
+        .product .price-section .discount {
+            background-color: #e58e26;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 5px;
         }
 
-        .product .icon:hover {
-            color: #e58e26;
+        .product .status {
+            font-size: 14px;
+            color: #28a745;
+            margin-top: 5px;
         }
 
         .product button {
@@ -139,15 +142,10 @@
     <header>
         <h1>عشتار</h1>
         <nav>
-            <a href="#">
-                <i class="icon">👤</i> الحساب
-            </a>
-            <a href="#">
-                <i class="icon">🛒</i> السلة
-            </a>
-            <a href="#">
-                <i class="icon">📞</i> الدعم
-            </a>
+            <!-- أيقونات الحساب، السلة، والدعم -->
+            <a href="#"><i class="icon">👤</i> حساب</a>
+            <a href="#"><i class="icon">🛒</i> سلة</a>
+            <a href="#"><i class="icon">📞</i> دعم</a>
         </nav>
     </header>
 
@@ -169,12 +167,11 @@
                         <img src="${productImage}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150';">
                         <div class="info">
                             <h2>${product.name}</h2>
-                            <p>حالة المنتج: ${product.condition}</p>
-                            <p class="price">${product.minprice} - ${product.maxprice} دينار</p>
-                            <div class="icons">
-                                <span class="icon" title="إضافة للمفضلة">💖</span>
-                                <span class="icon" title="مشاركة المنتج">📤</span>
-                                <span class="icon" title="تقييم المنتج">⭐</span>
+                            <p class="status">${product.condition}</p>
+                            <div class="price-section">
+                                <div class="price">${product.minprice} دينار</div>
+                                <div class="old-price">${product.maxprice} دينار</div>
+                                <div class="discount">${product.discount}% OFF</div>
                             </div>
                             <button onclick="viewProductDetails(${product.id})">عرض التفاصيل</button>
                         </div>
