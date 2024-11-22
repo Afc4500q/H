@@ -104,7 +104,6 @@
         .product .price-section .old-price {
             font-size: 16px;
             color: #888;
-            text-decoration: line-through;
         }
 
         .product .price-section .discount {
@@ -143,9 +142,9 @@
         <h1>عشتار</h1>
         <nav>
             <!-- أيقونات الحساب، السلة، والدعم -->
-            <a href="#"><i class="icon">👤</i> حساب</a>
-            <a href="#"><i class="icon">🛒</i> سلة</a>
-            <a href="#"><i class="icon">📞</i> دعم</a>
+            <a href="#"><i class="icon">👤</i></a>
+            <a href="#"><i class="icon">🛒</i></a>
+            <a href="#"><i class="icon">📞</i></a>
         </nav>
     </header>
 
@@ -169,8 +168,8 @@
                             <h2>${product.name}</h2>
                             <p class="status">${product.condition}</p>
                             <div class="price-section">
-                                <div class="price">${product.minprice} دينار</div>
-                                <div class="old-price">${product.maxprice} دينار</div>
+                                <div class="price">${product.minprice} دينار عراقي</div>
+                                <div class="old-price">${product.maxprice} دينار عراقي</div>
                                 <div class="discount">${product.discount}% OFF</div>
                             </div>
                             <button onclick="viewProductDetails(${product.id})">عرض التفاصيل</button>
