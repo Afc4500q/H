@@ -127,31 +127,35 @@ body {
     <div id="products-list"></div>
 
     <script>
-        fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products') // استبدل بـ رابط الـ API الفعلي
-            .then(response => response.json())
-            .then(products => {
-                const productsList = document.getElementById('products-list');
-                products.forEach(product => {
-                    const productElement = document.createElement('div');
-                    productElement.classList.add('product');
-                    productElement.innerHTML = `
-                        <h2>${product.name}</h2>
-                        <img src="${product.avatar}" alt="${product.name}">
-                        <p>السعر: ${product.minprice} - ${product.maxprice}</p>
-                        <p>حالة المنتج: ${product.condition}</p>
-                        <button onclick="viewProductDetails(${product.id})">عرض التفاصيل</button>
-                    `;
-                    productsList.appendChild(productElement);
-                });
-            })
-            .catch(error => console.error('خطأ في جلب البيانات:', error));
+        fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products') // استبدل برابط الـ API الفعلي
+    .then(response => response.json())
+    .then(products => {
+        const productsList = document.getElementById('products-list');
+        products.forEach(product => {
+            const productElement = document.createElement('div');
+            productElement.classList.add('product');
 
-        function viewProductDetails(productId) {
-            // تخزين ID المنتج في localStorage
-            localStorage.setItem('selectedProductId', productId);
-            // الانتقال إلى صفحة تفاصيل المنتج
-            window.location.href = 'product.html';
-        }
+            // عرض الصورة الأولى فقط
+            const productImage = product.images.length > 0 ? product.images[0] : 'https://via.placeholder.com/150';
+
+            productElement.innerHTML = `
+                <h2>${product.name}</h2>
+                <img src="${productImage}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150';">
+                <p>السعر: ${product.minprice} - ${product.maxprice}</p>
+                <p>حالة المنتج: ${product.condition}</p>
+                <button onclick="viewProductDetails(${product.id})">عرض التفاصيل</button>
+            `;
+            productsList.appendChild(productElement);
+        });
+    })
+    .catch(error => console.error('خطأ في جلب البيانات:', error));
+
+function viewProductDetails(productId) {
+    // تخزين ID المنتج في localStorage
+    localStorage.setItem('selectedProductId', productId);
+    // الانتقال إلى صفحة تفاصيل المنتج
+    window.location.href = 'product.html';
+}
     </script>
 </body>
 </html>
