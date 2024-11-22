@@ -1,145 +1,30 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>عشتار | المنتجات</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f5f5f5;
-      direction: rtl;
-    }
-    header {
-      background-color: #003b49;
-      color: #f1c40f;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header .logo {
-      font-size: 30px;
-      font-weight: bold;
-    }
-    header .icons {
-      display: flex;
-      gap: 15px;
-    }
-    header .icons i {
-      font-size: 24px;
-      cursor: pointer;
-      color: white;
-    }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 20px;
-    }
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
-    }
-    .product-box {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      background-color: #fff;
-      overflow: hidden;
-      cursor: pointer;
-      position: relative;
-    }
-    .product-box img {
-      width: 100%;
-      height: 200px;
-      object-fit: contain;
-    }
-    .product-box .details {
-      padding: 10px;
-      text-align: center;
-    }
-    .product-box .details h3 {
-      color: #333;
-      margin-bottom: 10px;
-    }
-    .product-box .details .price {
-      font-size: 18px;
-      color: #28a745;
-      font-weight: bold;
-    }
-    .product-box .details .discount {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: #ff4747;
-      color: white;
-      border-radius: 50%;
-      padding: 5px 10px;
-    }
-    .product-box:hover {
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنتجات</title>
 </head>
 <body>
-  <header>
-    <div class="logo">عشتار</div>
-    <div class="icons">
-      <i class="fas fa-user"></i>
-      <i class="fas fa-question-circle"></i>
-      <i class="fas fa-shopping-cart" onclick="window.location.href='cart.html'"></i>
-    </div>
-  </header>
-
-  <div class="container">
     <h1>المنتجات</h1>
-    <div class="products" id="productsContainer">جارٍ تحميل المنتجات...</div>
-  </div>
+    <div id="products-list"></div>
 
-  <script>
-    // جلب المنتجات من API وعرضها
-    fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products')
-      .then(response => response.json())
-      .then(products => {
-        const productsContainer = document.getElementById('productsContainer');
-        productsContainer.innerHTML = ''; // تفريغ المحتوى
-
-        products.forEach(product => {
-          const productBox = document.createElement('div');
-          productBox.className = 'product-box';
-
-          // إعداد الصور من المصفوفة
-          let imagesHtml = '';
-          if (product.images && product.images.length > 0) {
-            imagesHtml = `<img src="${product.images[0].trim()}" alt="صورة المنتج">`;
-          }
-
-          // إضافة تفاصيل المنتج
-          productBox.innerHTML = `
-            ${imagesHtml || `<img src="https://via.placeholder.com/300" alt="صورة افتراضية">`}
-            <div class="details">
-              <h3>${product.name}</h3>
-              <p class="price">السعر: ${product.minprice} - ${product.maxprice}</p>
-              <div class="discount">خصم</div>
-            </div>
-          `;
-
-          // إضافة حدث للنقر على المنتج للانتقال إلى صفحة المنتج الواحد
-          productBox.onclick = () => {
-            localStorage.setItem('currentProduct', JSON.stringify(product));
-            window.location.href = 'product.html';
-          };
-
-          productsContainer.appendChild(productBox);
-        });
-      })
-      .catch(error => {
-        console.error('Error loading products:', error);
-      });
-  </script>
+    <script>
+        fetch('https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products')
+            .then(response => response.json())
+            .then(products => {
+                const productsList = document.getElementById('products-list');
+                products.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.innerHTML = `
+                        <h2>${product.name}</h2>
+                        <img src="${product.avatar}" alt="${product.name}" width="100">
+                        <p>السعر: ${product.minprice} - ${product.maxprice}</p>
+                        <button onclick="window.location.href='product.html?id=${product.id}'">عرض التفاصيل</button>
+                    `;
+                    productsList.appendChild(productElement);
+                });
+            });
+    </script>
 </body>
 </html>
