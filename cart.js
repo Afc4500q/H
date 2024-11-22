@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سلة المنتجات</title>
+  <title>سلة الكحاب</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,14 +11,6 @@
       padding: 0;
       background-color: #f5f5f5;
       direction: rtl;
-    }
-    header {
-      background-color: #003b49;
-      color: #f1c40f;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
     .cart-item {
       display: flex;
@@ -28,7 +20,7 @@
     .cart-item img {
       width: 100px;
       height: 100px;
-      object-fit: contain;
+      object-fit: cover;
     }
     .remove-btn {
       background-color: red;
@@ -48,20 +40,15 @@
     </div>
   </header>
 
-  <div class="container">
-    <div id="cartItems"></div>
-    <div id="emptyCartMessage" style="display: none;">السلة فارغة حاليًا!</div>
-  </div>
+  <div class="container" id="cartItems"></div>
 
   <script>
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const cartItemsContainer = document.getElementById('cartItems');
-    const emptyCartMessage = document.getElementById('emptyCartMessage');
 
     if (cart.length === 0) {
-      emptyCartMessage.style.display = 'block';
+      cartItemsContainer.innerHTML = '<p>السلة فارغة حاليًا!</p>';
     } else {
-      emptyCartMessage.style.display = 'none';
       cart.forEach(product => {
         const cartItem = document.createElement('div');
         cartItem.classList.add('cart-item');
@@ -69,20 +56,24 @@
           <img src="${product.images[0]}" alt="${product.name}">
           <div>
             <h4>${product.name}</h4>
-            <p>السعر: ${product.minprice} - ${product.maxprice}</p>
+            <p>السعر: ${product.price}</p>
           </div>
-          <button class="remove-btn" onclick="removeFromCart(${product.id})">إزالة</button>
-        `;
-        cartItemsContainer.appendChild(cartItem);
-      });
-    }
+                  <button class="remove-btn" onclick="removeFromCart(${product.id})">إزالة</button>
+      </div>
+    `;
+    cartItemsContainer.appendChild(cartItem);
+  });
+}
 
-    function removeFromCart(productId) {
-      const updatedCart = cart.filter(product => product.id !== productId);
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
-      alert('تم إزالة المنتج من السلة');
-      window.location.reload();
-    }
-  </script>
+// إزالة المنتج من السلة
+function removeFromCart(productId) {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  // تصفية المنتج الذي يطابق الـ id
+  cart = cart.filter(product => product.id !== productId);
+  localStorage.setItem('cart', JSON.stringify(cart)); // حفظ السلة في localStorage
+  window.location.reload(); // إعادة تحميل الصفحة لتحديث السلة
+}
+</script>
+
 </body>
 </html>
