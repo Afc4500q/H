@@ -1,3 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم</title>
+    <style>
+        .form-container {
+            margin: 20px;
+        }
+        .form-container input,
+        .form-container textarea {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .items-container {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>إضافة / تعديل عنصر</h2>
+        <input type="hidden" id="itemId">
+        <input type="text" id="itemName" placeholder="اسم العنصر">
+        <input type="text" id="itemAvatar" placeholder="رابط الصورة">
+        <input type="number" id="itemMinPrice" placeholder="السعر الأدنى">
+        <input type="number" id="itemMaxPrice" placeholder="السعر الأقصى">
+        <input type="text" id="itemCondition" placeholder="الحالة">
+        <input type="number" id="itemDiscount" placeholder="الخصم">
+        <textarea id="itemDescription" placeholder="الوصف"></textarea>
+        <button onclick="saveItem()">حفظ العنصر</button>
+    </div>
+
+    <div class="search-container">
+        <h2>بحث عن عنصر</h2>
+        <input type="text" id="searchId" placeholder="أدخل معرف المنتج (ID)">
+        <button onclick="searchItem()">بحث</button>
+    </div>
+
+    <script>
+        const apiUrl = "https://673a0d78a3a36b5a62f0945e.mockapi.io/products/api/products"; // رابط الـ API الخاص بك
+
+        // دالة لجلب العناصر من الـ API
+        function getItems() {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // هنا يمكنك تجميع أو عرض قائمة العناصر إذا رغبت في ذلك
+                    console.log(data); // عرض البيانات في وحدة التحكم
+                })
+                .catch(error => console.error("Error fetching items:", error));
+        }
+
+        // دالة لحفظ (إضافة/تعديل) عنصر
+        function saveItem() {
+            const itemId = document.getElementById("itemId").value;
+            const itemName = document.getElementById("itemName").value;
+            const itemAvatar = document.getElementById("itemAvatar").value;
+            const itemMinPrice = document.getElementById("itemMinPrice").value;
+            const itemMaxPrice = document.getElementById("itemMaxPrice").value;
+            const itemCondition = document.getElementById("itemCondition").value;
+            const itemDiscount = document.getElementById("itemDiscount").value;
+            const itemDescription = document.getElementById("itemDescription").value;
+
+            const itemData = {
+                name: itemName,
+                avatar: itemAvatar,
+                minprice: itemMinPrice,
+                maxprice: itemMaxPrice,
+                condition: itemCondition,
+                discount: itemDiscount,
+                description: itemDescription
+            };
+
+            const method = itemId ? "PUT" : "POST"; // إذا كان هناك itemId، نستخدم PUT للتعديل، وإلا نستخدم POST للإضافة
+            const url = itemId ? `${apiUrl}/${itemId}` : apiUrl; // إذا كان هناك itemId، نضيفه إلى رابط API للتعديل
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(itemData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Item saved:", data);
+                clearForm(); // مسح النموذج بعد الحفظ
+            })
+            .catch(error => console.error("Error saving item:", error));
+        }
+
+        // دالة للبحث عن عنصر باستخدام id
+        function searchItem() {
+            const searchId = document.getElementById("searchId").value;
+            if (!searchId) {
+                alert("يرجى إدخال معرف المنتج (ID) للبحث");
+                return;
+            }
+fetch(`${apiUrl}/${searchId}`)
+                .then(response => response.json())
+                .then(item => {
+                    if (item) {
+                        document.getElementById("itemId").value = item.id;
+                        document.getElementById("itemName").value = item.name;
+                        document.getElementById("itemAvatar").value = item.avatar;
+                        document.getElementById("itemMinPrice").value = item.minprice;
+                        document.getElementById("itemMaxPrice").value = item.maxprice;
+                        document.getElementById("itemCondition").value = item.condition;
+                        document.getElementById("itemDiscount").value = item.discount;
+                        document.getElementById("itemDescription").value = item.description;
+                    } else {
+                        alert("لم يتم العثور على المنتج بالمعرف المدخل.");
+                    }
+                })
+                .catch(error => console.error("Error fetching item:", error));
+        }
 
         // دالة لمسح النموذج
         function clearForm() {
@@ -16,3 +136,4 @@
     </script>
 </body>
 </html>
+
