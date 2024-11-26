@@ -1,0 +1,34 @@
+ 
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم</title>
+    <style>
+        .form-container {
+            margin: 20px;
+        }
+        .form-container input {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .search-container {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>إضافة / تعديل مستخدم</h2>
+        <input type="hidden" id="userId">
+        <input type="text" id="username" placeholder="اسم المستخدم">
+        <input type="text" id="password" placeholder="كلمة المرور">
+        <input type="text" id="balance" placeholder="الرصيد">
+        <input type="number" id="successfulOrders" placeholder="الطلبات الناجحة">
+        <input type="number" id="pendingOrders" placeholder="الطلبات المعلقة">
+        <input type="text" id="name" placeholder="الاسم">
+        <button onclick="saveUser()">حفظ المستخدم</button>
+    </div>
