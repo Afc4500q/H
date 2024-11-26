@@ -25,7 +25,7 @@
         <h2>إضافة / تعديل عنصر</h2>
         <input type="hidden" id="itemId">
         <input type="text" id="itemName" placeholder="اسم العنصر">
-        <input type="text" id="itemAvatar" placeholder="رابط الصورة">
+        <input type="text" id="itemImages" placeholder="رابط الصورة">
         <input type="number" id="itemMinPrice" placeholder="السعر الأدنى">
         <input type="number" id="itemMaxPrice" placeholder="السعر الأقصى">
         <input type="text" id="itemCondition" placeholder="الحالة">
@@ -58,7 +58,7 @@
         function saveItem() {
             const itemId = document.getElementById("itemId").value;
             const itemName = document.getElementById("itemName").value;
-            const itemAvatar = document.getElementById("itemAvatar").value;
+            const itemImages = document.getElementById("itemImages").value;
             const itemMinPrice = document.getElementById("itemMinPrice").value;
             const itemMaxPrice = document.getElementById("itemMaxPrice").value;
             const itemCondition = document.getElementById("itemCondition").value;
@@ -67,7 +67,7 @@
 
             const itemData = {
                 name: itemName,
-                avatar: itemAvatar,
+                images: itemImages,
                 minprice: itemMinPrice,
                 maxprice: itemMaxPrice,
                 condition: itemCondition,
@@ -106,7 +106,7 @@ fetch(`${apiUrl}/${searchId}`)
                     if (item) {
                         document.getElementById("itemId").value = item.id;
                         document.getElementById("itemName").value = item.name;
-                        document.getElementById("itemAvatar").value = item.avatar;
+                        document.getElementById("itemImages").value = item.images;
                         document.getElementById("itemMinPrice").value = item.minprice;
                         document.getElementById("itemMaxPrice").value = item.maxprice;
                         document.getElementById("itemCondition").value = item.condition;
@@ -123,7 +123,7 @@ fetch(`${apiUrl}/${searchId}`)
         function clearForm() {
             document.getElementById("itemId").value = '';
             document.getElementById("itemName").value = '';
-            document.getElementById("itemAvatar").value = '';
+            document.getElementById("itemImages").value = '';
             document.getElementById("itemMinPrice").value = '';
             document.getElementById("itemMaxPrice").value = '';
             document.getElementById("itemCondition").value = '';
