@@ -25,7 +25,7 @@
         <h2>إضافة / تعديل عنصر</h2>
         <input type="hidden" id="itemId">
         <input type="text" id="itemName" placeholder="اسم العنصر">
-        <input type="text" id="itemImages" placeholder="رابط الصورة">
+        <textarea id="itemImages" placeholder="روابط الصور (افصل بينها بفاصلة)"></textarea>
         <input type="number" id="itemMinPrice" placeholder="السعر الأدنى">
         <input type="number" id="itemMaxPrice" placeholder="السعر الأقصى">
         <input type="text" id="itemCondition" placeholder="الحالة">
@@ -58,7 +58,7 @@
         function saveItem() {
             const itemId = document.getElementById("itemId").value;
             const itemName = document.getElementById("itemName").value;
-            const itemImages = document.getElementById("itemImages").value;
+            const itemImages = document.getElementById("itemImages").value.split(',').map(image => image.trim()); // تحويل الصور إلى array وإزالة المساحات
             const itemMinPrice = document.getElementById("itemMinPrice").value;
             const itemMaxPrice = document.getElementById("itemMaxPrice").value;
             const itemCondition = document.getElementById("itemCondition").value;
@@ -100,13 +100,13 @@
                 alert("يرجى إدخال معرف المنتج (ID) للبحث");
                 return;
             }
-fetch(`${apiUrl}/${searchId}`)
+            fetch(`${apiUrl}/${searchId}`)
                 .then(response => response.json())
                 .then(item => {
                     if (item) {
                         document.getElementById("itemId").value = item.id;
                         document.getElementById("itemName").value = item.name;
-                        document.getElementById("itemImages").value = item.images;
+                        document.getElementById("itemImages").value = item.images.join(', '); // تحويل array إلى سلسلة نصية
                         document.getElementById("itemMinPrice").value = item.minprice;
                         document.getElementById("itemMaxPrice").value = item.maxprice;
                         document.getElementById("itemCondition").value = item.condition;
@@ -136,4 +136,3 @@ fetch(`${apiUrl}/${searchId}`)
     </script>
 </body>
 </html>
-
