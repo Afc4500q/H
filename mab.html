@@ -1,4 +1,3 @@
- 
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -32,3 +31,103 @@
         <input type="text" id="name" placeholder="الاسم">
         <button onclick="saveUser()">حفظ المستخدم</button>
     </div>
+
+    <div class="search-container">
+        <h2>بحث عن مستخدم</h2>
+        <input type="text" id="searchId" placeholder="أدخل معرف المستخدم (ID)">
+        <button onclick="searchUser()">بحث</button>
+    </div>
+
+    <script>
+        const apiUrl = "https://673a394a339a4ce445179ae7.mockapi.io/User"; // رابط الـ API الخاص بك
+
+        // دالة لجلب المستخدمين من الـ API
+        function getUsers() {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // هنا يمكنك تجميع أو عرض قائمة المستخدمين إذا رغبت في ذلك
+                    console.log(data); // عرض البيانات في وحدة التحكم
+                })
+                .catch(error => console.error("Error fetching users:", error));
+        }
+
+        // دالة لحفظ (إضافة/تعديل) مستخدم
+        function saveUser() {
+            const userId = document.getElementById("userId").value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const balance = document.getElementById("balance").value;
+            const successfulOrders = document.getElementById("successfulOrders").value;
+            const pendingOrders = document.getElementById("pendingOrders").value;
+            const name = document.getElementById("name").value;
+
+            const userData = {
+                username: username,
+                password: password,
+                balance: balance,
+                successfulOrders: successfulOrders,
+                pendingOrders: pendingOrders,
+                name: name
+            };
+
+            const method = userId ? "PUT" : "POST"; // إذا كان هناك userId، نستخدم PUT للتعديل، وإلا نستخدم POST للإضافة
+            const url = userId ? `${apiUrl}/${userId}` : apiUrl; // إذا كان هناك userId، نضيفه إلى رابط API للتعديل
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("User saved:", data);
+                clearForm(); // مسح النموذج بعد الحفظ
+            })
+            .catch(error => console.error("Error saving user:", error));
+        }
+
+        // دالة للبحث عن مستخدم باستخدام id
+        function searchUser() {
+            const searchId = document.getElementById("searchId").value;
+            if (!searchId) {
+                alert("يرجى إدخال معرف المستخدم (ID) للبحث");
+                return;
+            }
+
+            fetch(`${apiUrl}/${searchId}`)
+                .then(response => response.json())
+                .then(user => {
+                    if (user) {
+                     document.getElementById("userId").value = user.id;
+                        document.getElementById("username").value = user.username;
+                        document.getElementById("password").value = user.password;
+                        document.getElementById("balance").value = user.balance;
+                        document.getElementById("successfulOrders").value = user.successfulOrders;
+                        document.getElementById("pendingOrders").value = user.pendingOrders;
+                        document.getElementById("name").value = user.name;
+                    } else {
+                        alert("لم يتم العثور على المستخدم بالمعرف المدخل.");
+                    }
+                })
+                .catch(error => console.error("Error fetching user:", error));
+        }
+
+        // دالة لمسح النموذج
+        function clearForm() {
+            document.getElementById("userId").value = '';
+            document.getElementById("username").value = '';
+            document.getElementById("password").value = '';
+            document.getElementById("balance").value = '';
+            document.getElementById("successfulOrders").value = '';
+            document.getElementById("pendingOrders").value = '';
+            document.getElementById("name").value = '';
+        }
+
+        // تحميل المستخدمين عند فتح الصفحة
+        document.addEventListener("DOMContentLoaded", getUsers);
+    </script>
+</body>
+</html>
