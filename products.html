@@ -30,6 +30,7 @@
         <input type="number" id="itemMaxPrice" placeholder="السعر الأقصى">
         <input type="text" id="itemCondition" placeholder="الحالة">
         <input type="number" id="itemDiscount" placeholder="الخصم">
+        <input type="number" id="itemColor" placeholder="الالوان">
         <textarea id="itemDescription" placeholder="الوصف"></textarea>
         <button onclick="saveItem()">حفظ العنصر</button>
     </div>
@@ -63,6 +64,7 @@
             const itemMaxPrice = document.getElementById("itemMaxPrice").value;
             const itemCondition = document.getElementById("itemCondition").value;
             const itemDiscount = document.getElementById("itemDiscount").value;
+            const itemColor = document.getElementById("itemColor").value;
             const itemDescription = document.getElementById("itemDescription").value;
 
             const itemData = {
@@ -72,7 +74,8 @@
                 maxprice: itemMaxPrice,
                 condition: itemCondition,
                 discount: itemDiscount,
-                description: itemDescription
+                description: itemDescription,
+                color: itemColor
             };
 
             const method = itemId ? "PUT" : "POST"; // إذا كان هناك itemId، نستخدم PUT للتعديل، وإلا نستخدم POST للإضافة
@@ -111,6 +114,7 @@
                         document.getElementById("itemMaxPrice").value = item.maxprice;
                         document.getElementById("itemCondition").value = item.condition;
                         document.getElementById("itemDiscount").value = item.discount;
+                        document.getElementById("itemColor").value = item.color;
                         document.getElementById("itemDescription").value = item.description;
                     } else {
                         alert("لم يتم العثور على المنتج بالمعرف المدخل.");
@@ -128,6 +132,7 @@
             document.getElementById("itemMaxPrice").value = '';
             document.getElementById("itemCondition").value = '';
             document.getElementById("itemDiscount").value = '';
+            document.getElementById("itemColor").value = '';
             document.getElementById("itemDescription").value = '';
         }
 
