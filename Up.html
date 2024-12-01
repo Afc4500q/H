@@ -1,91 +1,99 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رفع الصور</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        input[type="file"] {
-            margin: 10px 0;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #result {
-            margin-top: 20px;
-            white-space: pre-wrap;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نافذة تظهر من الأسفل</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #f0f0f0;
+    }
+
+    button {
+      position: fixed;
+      bottom: 10px;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .bottom-sheet {
+      position: fixed;
+      bottom: -70%;
+      left: 0;
+      width: 100%;
+      height: 80%;
+      background-color: #f5f5f5;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+      transition: bottom 0.3s ease;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .bottom-sheet .handle {
+      width: 40px;
+      height: 5px;
+      background-color: #ccc;
+      border-radius: 5px;
+      margin: 10px auto;
+    }
+
+    .bottom-sheet.active {
+      bottom: 0;
+    }
+
+    .close-btn {
+      align-self: center;
+      padding: 10px 20px;
+      background-color: #FF4136;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>اختر الصور لرفعها</h2>
-        <input type="file" id="fileInput" multiple>
-        <button onclick="uploadFiles()">رفع الصور</button>
-        <p id="result"></p>
+  <button id="openSheet">إظهار النافذة</button>
+
+  <div class="bottom-sheet" id="bottomSheet">
+    <div class="handle"></div>
+    <div>
+      <h2>محتوى النافذة</h2>
+      <p>يمكنك وضع أي محتوى تريده هنا!</p>
     </div>
+    <button class="close-btn" id="closeSheet">إغلاق النافذة</button>
+  </div>
 
-    <script>
-        async function uploadFiles() {
-            const fileInput = document.getElementById('fileInput');
-            const files = fileInput.files;
-            if (files.length === 0) {
-                alert('يرجى اختيار الصور أولاً');
-                return;
-            }
+  <script>
+    const openButton = document.getElementById('openSheet');
+    const closeButton = document.getElementById('closeSheet');
+    const bottomSheet = document.getElementById('bottomSheet');
 
-            const apiKey = 'YOUR_API_KEY'; // ضع مفتاح API الخاص بك هنا
-            let imageLinks = [];
+    openButton.addEventListener('click', () => {
+      bottomSheet.classList.add('active');
+    });
 
-            for (let i = 0; i < files.length; i++) {
-                let formData = new FormData();
-                formData.append('image', files[i]);
-                formData.append('key', apiKey);
-
-                try {
-                    const response = await fetch('https://api.imgbb.com/1/upload', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const result = await response.json();
-                    if (result.success) {
-                        imageLinks.push(result.data.url);
-                    } else {
-                        alert('فشل في رفع الصورة: ' + files[i].name);
-                    }
-                } catch (error) {
-                    console.error('Error uploading file:', error);
-                    alert('حدث خطأ أثناء رفع الصور');
-                }
-            }
-
-            document.getElementById('result').innerText = imageLinks.join(', ');
-        }
-    </script>
+    closeButton.addEventListener('click', () => {
+      bottomSheet.classList.remove('active');
+    });
+  </script>
 </body>
 </html>
-
